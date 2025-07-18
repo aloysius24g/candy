@@ -1,4 +1,7 @@
 import { useContext, useEffect, useState, useRef } from 'react';
+import FuzzySelector from './FuzzySelector';
+import * as Select from '@radix-ui/react-select';
+import Popup from './Popup';
 import { AppContext } from './AppState';
 import { CustomPicker } from 'react-color';
 import { Hue, Saturation } from 'react-color/lib/components/common';
@@ -9,13 +12,36 @@ import {
 } from '../utils/colorsUtils';
 import { useIsWide } from '../utils/responsive';
 
-function ColorPicker({ className }) {
-    const { termPalate, setTermPalate, colorPickerFor } =
+function ColorPicker({ className, compact }) {
+    const colorNames = [
+        'foreground',
+        'black',
+        'red',
+        'green',
+        'yellow',
+        'blue',
+        'magenta',
+        'cyan',
+        'white',
+        'background',
+        'brightBlack',
+        'brightRed',
+        'brightGreen',
+        'brightYellow',
+        'brightBlue',
+        'brightMagenta',
+        'brightCyan',
+        'brightWhite',
+    ];
+
+    const { termPalate, setTermPalate, colorPickerFor, setColorPickerFor } =
         useContext(AppContext);
 
     const iswide = useIsWide();
 
+    const [opaqe, setOpaqe] = useState(true);
     const [hsv, setHsv] = useState({ h: 0, s: 0, v: 0 });
+    const [compactPopup, setCompactPopup] = useState(false);
     const hsvRef = useRef(hsv);
 
     useEffect(() => {
@@ -63,9 +89,9 @@ function ColorPicker({ className }) {
         ? termPalate[colorPickerFor]
         : '#000000';
 
-    return (
+    const colorPicker = (
         <div
-            className={'border-r-1 border-t-1 border-black overflow-auto p-1 flex flex-col gap-2 select-none'}
+            className={'flex flex-col gap-2 overflow-auto p-1 select-none'}
             style={{ gridArea: 'colorpicker' }}
         >
             <div className="relative h-3">
@@ -91,6 +117,60 @@ function ColorPicker({ className }) {
                 {currentColor}
             </div>
         </div>
+    );
+    if (!compact) {
+        return colorPicker;
+    }
+    return (
+        <>
+            <button
+                className="m-1 cursor-pointer rounded-sm border border-black bg-red-700 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white"
+                style={{ gridArea: 'colorpicker' }}
+                onClick={() => setCompactPopup(true)}
+            >
+                Customize Palate
+            </button>
+            {compactPopup && (
+                <Popup closeCb={() => setCompactPopup(false)} noBlur>
+                    <div
+                        className="flex h-[50vh] w-[50vh] flex-col justify-center bg-white p-8 sm:w-[60vw]"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            setOpaqe(false);
+                        }}
+                    >
+                        <div className="flex justify-between">
+                            <label className="block">Select For:</label>
+                            <Select.Root
+                                defaultValue={colorNames[0]}
+                                onValueChange={(value) =>
+                                    setColorPickerFor(value)
+                                }
+                            >
+                                <Select.Trigger asChild>
+                                    <button className="p-1 outline-1">
+                                        {colorPickerFor}
+                                    </button>
+                                </Select.Trigger>
+                                <Select.Content className="z-40 bg-white">
+                                    <Select.Viewport>
+                                        {colorNames.map((colorName) => (
+                                            <Select.Item
+                                                key={colorName}
+                                                value={colorName}
+                                            >
+                                                {colorName}
+                                            </Select.Item>
+                                        ))}
+                                    </Select.Viewport>
+                                </Select.Content>
+                            </Select.Root>
+                        </div>
+                        {colorPicker}
+                    </div>
+                </Popup>
+            )}
+        </>
     );
 }
 

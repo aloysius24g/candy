@@ -13,12 +13,12 @@ export default function PalateContainer({ className }) {
     const { isFetching, refetch, error, data } = useQuery({
         queryKey: [themeName],
         queryFn: () => {
-			if(themeName) {
-				return getThemeColors(themeName);
-			}else {
-				return new Promise.resolve();
-			}
-		},
+            if (themeName) {
+                return getThemeColors(themeName);
+            } else {
+                return new Promise.resolve();
+            }
+        },
         staleTime: 60 * 60 * 100,
     });
 
@@ -26,17 +26,15 @@ export default function PalateContainer({ className }) {
         refetch();
     }, [themeName]);
 
-	useEffect(() => {
-		if(error){
-			toast('fuckeeeeee', {type: 'error'});
-		}
-	}, [error]);
+    useEffect(() => {
+        if (error) {
+            toast('fuckeeeeee', { type: 'error' });
+        }
+    }, [error]);
 
-	if(themeName === null) {
-		return <div>
-			choose a theme
-		</div>
-	};
+    if (themeName === null) {
+        return <div>choose a theme</div>;
+    }
 
     if (isFetching) {
         return <Loader className={`${className ? className : ''}`} />;

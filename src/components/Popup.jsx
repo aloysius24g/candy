@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function Popup({ children, closeCb }) {
+export default function Popup({ children, closeCb, noBlur }) {
     const escPressHandler = (event) => {
         if (event.key === 'Escape') {
             closeCb();
@@ -16,8 +16,8 @@ export default function Popup({ children, closeCb }) {
 
     return (
         <div
-            className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
-            onClick={() => closeCb()}
+            className={`absolute inset-0 z-50 flex items-center justify-center ${!noBlur && 'backdrop-blur-xs'} p-3`}
+            onClick={closeCb}
         >
             {React.Children.map(children, (child) =>
                 React.cloneElement(child, { closeCb: closeCb }),

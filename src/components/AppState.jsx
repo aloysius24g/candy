@@ -5,6 +5,7 @@ const AppContext = createContext();
 function AppContextProvider({ children }) {
     const [themeName, setThemeName] = useState(null);
     const [appName, setAppName] = useState(null);
+    const [wMMode, setWMMode] = useState(false);
     const [termPalate, setTermPalate] = useState({
         foreground: null,
         black: null,
@@ -37,6 +38,8 @@ function AppContextProvider({ children }) {
                 setTermPalate,
                 appName,
                 setAppName,
+                wMMode,
+                setWMMode,
                 isThemePalateActive,
                 setIsThemePalateActive,
                 colorPickerFor,

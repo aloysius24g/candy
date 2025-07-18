@@ -1,19 +1,14 @@
 import { useContext } from 'react';
-
 import TerminalView from './components/TerminalView';
 import PalateContainer from './components/PalateContainer';
-import TerminalPalate from './components/TerminalPalate';
 import TerminalBar from './components/TerminalBar';
 import { AppContext } from './components/AppState';
 import ColorPicker from './components/ColorPicker';
-import Popup from './components/Popup';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import { useIsWide } from './utils/responsive';
 
 function App() {
-    const { isThemePalateActive, setIsThemePalateActive } =
-        useContext(AppContext);
     const isWide = useIsWide();
 
     let gridLayout;
@@ -51,29 +46,13 @@ function App() {
                     gridTemplateRows: gridLayout.gridTemplateRows,
                 }}
             >
-                <span className="text-center px-2 content-center font-mono text-lg font-bold text-nowrap uppercase border-black border-b-1 border-r-1">
+                <span className="content-center border-r-1 border-b-1 border-black px-2 text-center font-mono text-lg font-bold text-nowrap uppercase">
                     terminal ugly
                 </span>
                 <PalateContainer className="grid grid-flow-col grid-cols-1 gap-1 overflow-y-auto p-1 md:grid-flow-row md:grid-cols-2 md:gap-2" />
-                <ColorPicker />
+                <ColorPicker compact={isWide ? false : true} />
                 <TerminalBar />
-                {/* hacky work, to avoid scrolling terminal when terminalPalate popup is active */}
-                <div
-                    style={{ gridArea: 'terminalview' }}
-                    className={`${isThemePalateActive ? 'overflow-hidden' : 'overflow-auto'} relative z-0 m-2`}
-                >
-                    <TerminalView />
-                    {isThemePalateActive && (
-                        <Popup closeCb={() => setIsThemePalateActive(false)}>
-                            <TerminalPalate
-                                className={
-                                    'w-[80vw] bg-cyan-50 p-3 md:w-[60vw]'
-                                }
-                            />
-                        </Popup>
-                    )}
-                </div>
-				<ToastContainer position='bottom-right'/>
+                <TerminalView />
             </div>
         </>
     );

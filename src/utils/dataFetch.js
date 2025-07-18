@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 async function getThemeColors(themeName) {
-	//throw new Error('fdkjfkj');
+    //throw new Error('fdkjfkj');
     const res = await axios.get(`./termthemes/${themeName}.json`);
     return res.data;
 }

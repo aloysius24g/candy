@@ -55,7 +55,7 @@ export default function TerminalPalate({ className }) {
     return (
         <div
             onClick={handelClickWraper}
-            className={`${className ? className : ''} grid grid-cols-9 text-center text-nowrap`}
+            className={`${className ? className : ''} grid grid-cols-9 bg-white p-3 text-center text-nowrap`}
         >
             <span className="py-1">Fg-Bg</span>
             <span className="overflow-hidden">Black</span>

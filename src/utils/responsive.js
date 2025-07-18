@@ -1,7 +1,7 @@
 import { useMediaQuery } from 'react-responsive';
 
 function useIsWide() {
-	return useMediaQuery({ minWidth: 800 });
+    return useMediaQuery({ minWidth: 800 });
 }
 
-export {useIsWide};
+export { useIsWide };
