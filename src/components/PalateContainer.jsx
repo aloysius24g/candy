@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AppContext } from './AppState';
 import { isBrightColor } from '../utils/colorsUtils';
@@ -7,72 +7,82 @@ import ErrorNotice from './ErrorNotice';
 import { getThemeColors } from '../utils/dataFetch';
 import { toast } from 'react-toastify';
 
-export default function PalateContainer({ className }) {
-  const { themeName } = useContext(AppContext);
+export default function PalateContainer({ className, compact }) {
+	const { themeName } = useContext(AppContext);
 
-  const { isFetching, refetch, error, data } = useQuery({
-    queryKey: [themeName],
-    queryFn: () => {
-      if (themeName) {
-        return getThemeColors(themeName);
-      } else {
-        return new Promise.resolve();
-      }
-    },
-    staleTime: 60 * 60 * 100,
-  });
+	const containerRef = useRef(null);
 
-  useEffect(() => {
-    refetch();
-  }, [themeName]);
+	// Prevent default not working for wheel.
+	// idk why. So we are using conditional horizontal scroll based on var:compact.
+	const handleWheelCompact = compact
+		? (e) => (containerRef.current.scrollLeft += e.deltaY)
+		: () => {}; // eat five star do noting.
 
-  useEffect(() => {
-    if (error) {
-      toast('fuckeeeeee', { type: 'error' });
-    }
-  }, [error]);
+	const { isFetching, refetch, error, data } = useQuery({
+		queryKey: [themeName],
+		queryFn: () => {
+			if (themeName) {
+				return getThemeColors(themeName);
+			} else {
+				return new Promise.resolve();
+			}
+		},
+		staleTime: 60 * 60 * 100,
+	});
 
-  if (themeName === null) {
-    return <div>choose a theme</div>;
-  }
+	useEffect(() => {
+		refetch();
+	}, [themeName]);
 
-  if (isFetching) {
-    return <Loader className={`${className ? className : ''}`} />;
-  }
+	useEffect(() => {
+		if (error) {
+			toast("can't fetch colors for the theme", { type: 'error' });
+		}
+	}, [error]);
 
-  if (error) {
-    return (
-      <ErrorNotice
-        errorMsg={'Something went wrong'}
-        className={`${className ? className : ''}`}
-      />
-    );
-  }
+	if (themeName === null) {
+		return <div>choose a theme</div>;
+	}
 
-  const handleDrag = (event, value) => {
-    event.dataTransfer.setData('dragData', value);
-    event.dataTransfer.effectAllowed = 'move';
-  };
-  let colorBadges = Object.entries(data.all).map(([key, value]) => {
-    let isBright = isBrightColor(value);
-    return (
-      <div
-        onDragStart={(event) => handleDrag(event, value)}
-        key={key}
-        className={`${isBright ? 'text-black' : 'text-white'} rounded-sm border border-black px-1 py-5 text-center text-xs select-none`}
-        style={{ backgroundColor: value }}
-        draggable
-      >
-        {value}
-      </div>
-    );
-  });
-  return (
-    <div
-      className={`${className ? className : ''}`}
-      style={{ gridArea: 'colorcontainer' }}
-    >
-      {colorBadges}
-    </div>
-  );
+	if (isFetching) {
+		return <Loader className={`${className ? className : ''}`} />;
+	}
+
+	if (error) {
+		return (
+			<div style={{ gridArea: 'colorcontainer' }} className="bg-red-950 p-2 text-gray-300">
+				Something went wrong
+			</div>
+		);
+	}
+
+	const handleDrag = (event, value) => {
+		event.dataTransfer.setData('dragData', value);
+		event.dataTransfer.effectAllowed = 'move';
+	};
+	let colorBadges = Object.entries(data.all).map(([key, value]) => {
+		let isBright = isBrightColor(value);
+		return (
+			<div
+				onDragStart={(event) => handleDrag(event, value)}
+				key={key}
+				className={`${isBright ? 'text-black' : 'text-white'} rounded-sm border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
+				style={{ backgroundColor: value }}
+				draggable
+			>
+				{value}
+			</div>
+		);
+	});
+
+	return (
+		<div
+			ref={containerRef}
+			onWheel={handleWheelCompact}
+			className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-y-auto scroll-smooth rounded-md bg-stone-800 p-2`}
+			style={{ gridArea: 'colorcontainer' }}
+		>
+			{colorBadges}
+		</div>
+	);
 }

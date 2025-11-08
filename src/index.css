@@ -1,51 +1,51 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'RedditMono';
-  src:
-    url('./fonts/reddit-mono/RedditMono-Light.woff2') format('woff2'),
-    url('./fonts/reddit-mono/RedditMono-Light.woff') format('woff'),
-    url('./fonts/reddit-mono/RedditMono-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
+	font-family: 'RedditMono';
+	src:
+		url('./fonts/reddit-mono/RedditMono-Light.woff2') format('woff2'),
+		url('./fonts/reddit-mono/RedditMono-Light.woff') format('woff'),
+		url('./fonts/reddit-mono/RedditMono-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'RedditMono';
-  src:
-    url('./fonts/reddit-mono/RedditMono-Regular.woff2') format('woff2'),
-    url('./fonts/reddit-mono/RedditMono-Regular.woff') format('woff'),
-    url('./fonts/reddit-mono/RedditMono-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+	font-family: 'RedditMono';
+	src:
+		url('./fonts/reddit-mono/RedditMono-Regular.woff2') format('woff2'),
+		url('./fonts/reddit-mono/RedditMono-Regular.woff') format('woff'),
+		url('./fonts/reddit-mono/RedditMono-Regular.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'RedditMono';
-  src:
-    url('./fonts/reddit-mono/RedditMono-SemiBold.woff2') format('woff2'),
-    url('./fonts/reddit-mono/RedditMono-SemiBold.woff') format('woff'),
-    url('./fonts/reddit-mono/RedditMono-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
+	font-family: 'RedditMono';
+	src:
+		url('./fonts/reddit-mono/RedditMono-SemiBold.woff2') format('woff2'),
+		url('./fonts/reddit-mono/RedditMono-SemiBold.woff') format('woff'),
+		url('./fonts/reddit-mono/RedditMono-SemiBold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'RedditMono';
-  src:
-    url('./fonts/reddit-mono/RedditMono-Bold.woff2') format('woff2'),
-    url('./fonts/reddit-mono/RedditMono-Bold.woff') format('woff'),
-    url('./fonts/reddit-mono/RedditMono-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
+	font-family: 'RedditMono';
+	src:
+		url('./fonts/reddit-mono/RedditMono-Bold.woff2') format('woff2'),
+		url('./fonts/reddit-mono/RedditMono-Bold.woff') format('woff'),
+		url('./fonts/reddit-mono/RedditMono-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'RedditMono';
-  src:
-    url('./fonts/reddit-mono/RedditMono-ExtraBold.woff2') format('woff2'),
-    url('./fonts/reddit-mono/RedditMono-ExtraBold.woff') format('woff'),
-    url('./fonts/reddit-mono/RedditMono-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
+	font-family: 'RedditMono';
+	src:
+		url('./fonts/reddit-mono/RedditMono-ExtraBold.woff2') format('woff2'),
+		url('./fonts/reddit-mono/RedditMono-ExtraBold.woff') format('woff'),
+		url('./fonts/reddit-mono/RedditMono-ExtraBold.ttf') format('truetype');
+	font-weight: 800;
+	font-style: normal;
 }
