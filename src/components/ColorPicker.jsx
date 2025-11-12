@@ -7,139 +7,149 @@ import { CustomPicker } from 'react-color';
 import { Hue, Saturation } from 'react-color/lib/components/common';
 import { convertHexToHsv, convertHsvToHex, isBrightColor } from '../utils/colorsUtils';
 import { useIsWide } from '../utils/responsive';
+import { AnimatePresence } from 'framer-motion';
 
 function ColorPicker({ className, compact }) {
-	const colorNames = [
-		'foreground',
-		'black',
-		'red',
-		'green',
-		'yellow',
-		'blue',
-		'magenta',
-		'cyan',
-		'white',
-		'background',
-		'brightBlack',
-		'brightRed',
-		'brightGreen',
-		'brightYellow',
-		'brightBlue',
-		'brightMagenta',
-		'brightCyan',
-		'brightWhite',
-	];
+  const colorNames = [
+    'foreground',
+    'black',
+    'red',
+    'green',
+    'yellow',
+    'blue',
+    'magenta',
+    'cyan',
+    'white',
+    'background',
+    'brightBlack',
+    'brightRed',
+    'brightGreen',
+    'brightYellow',
+    'brightBlue',
+    'brightMagenta',
+    'brightCyan',
+    'brightWhite',
+  ];
 
-	const { termPalate, setTermPalate, colorPickerFor, setColorPickerFor } = useContext(AppContext);
+  const { termPalate, setTermPalate, colorPickerFor, setColorPickerFor, setIsThemePalateActive } =
+    useContext(AppContext);
 
-	const iswide = useIsWide();
+  const iswide = useIsWide();
 
-	const [opaqe, setOpaqe] = useState(true);
-	const [hsv, setHsv] = useState({ h: 0, s: 0, v: 0 });
-	const [compactPopup, setCompactPopup] = useState(false);
-	const hsvRef = useRef(hsv);
+  const lastHue = useRef(0);
+  const [compactPopup, setCompactPopup] = useState(false);
 
-	useEffect(() => {
-		let tCol;
-		if (!termPalate[colorPickerFor]) {
-			tCol = '#000000'; // choose black if the terminal palate color is undefined
-		} else {
-			tCol = termPalate[colorPickerFor];
-		}
-		let tHsv = convertHexToHsv(tCol);
-		setHsv(tHsv);
-	}, [colorPickerFor, termPalate]);
+  let color = termPalate[colorPickerFor];
 
-	const handleHueChange = (event) => {
-		let tHsv = {
-			...hsv,
-			h: event.h,
-		};
-		let tColor = convertHsvToHex(tHsv);
-		setHsv(tHsv);
-		setTermPalate((prevThemePalate) => {
-			return {
-				...prevThemePalate,
-				[colorPickerFor]: tColor,
-			};
-		});
-	};
-	const handleSaturationChange = (event) => {
-		let tHsv = {
-			...hsv,
-			s: event.s,
-			v: event.v,
-		};
-		let tColor = convertHsvToHex(tHsv);
-		setHsv(tHsv);
-		setTermPalate((prevThemePalate) => {
-			return {
-				...prevThemePalate,
-				[colorPickerFor]: tColor,
-			};
-		});
-	};
+  useEffect(() => {
+    if (!compact) {
+      setCompactPopup(false);
+    }
+  }, [compact]);
 
-	let currentColor = termPalate[colorPickerFor] ? termPalate[colorPickerFor] : '#000000';
+  if (!color) {
+    color = '#000';
+  }
+  const hsv = convertHexToHsv(color);
+  const realTimeHue = hsv.h;
+  // Restore Hue state.
+  // But only when previous render's hue differs current by a resonable amount
+  // To reduce conversion error.
+  if (isNaN(hsv.h) || Math.abs(lastHue.current - hsv.h) <= 10) {
+    hsv.h = lastHue.current;
+  }
 
-	const colorPicker = (
-		<div
-			className={`flex flex-col gap-2 overflow-auto rounded-md bg-stone-900 p-1 p-2 select-none`}
-			style={{ gridArea: 'colorpicker' }}
-		>
-			<div className="relative h-3">
-				<Hue hsl={hsv} onChange={handleHueChange} direction="horizontal" />
-			</div>
-			<div className="relative h-30 border-1 border-indigo-200">
-				<Saturation hsv={hsv} hsl={hsv} onChange={handleSaturationChange} />
-			</div>
-			<div
-				style={{ backgroundColor: currentColor }}
-				className={`relative content-center text-center ${isBrightColor(currentColor) ? 'text-black' : 'text-white'}`}
-			>
-				{colorPickerFor}
-				<br />
-				{currentColor}
-			</div>
-		</div>
-	);
-	if (!compact) {
-		return colorPicker;
-	}
-	return (
-		<>
-			<button
-				className={`mb-1 ml-1 cursor-pointer rounded-sm border border-black bg-red-700 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white`}
-				style={{ gridArea: 'colorpicker' }}
-				onClick={() => setCompactPopup(true)}
-			>
-				Pick color
-			</button>
-			{compactPopup && (
-				<Popup closeCb={() => setCompactPopup(false)} noBlur>
-					<div
-						className="flex h-[50vh] w-[50vh] flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 p-8 text-indigo-200 sm:w-[60vw]"
-						onClick={(event) => {
-							event.stopPropagation();
-							setOpaqe(false);
-						}}
-					>
-						<div className="flex items-center justify-between">
-							<label className="block">Color:</label>
-							<FuzzySelector
-								//Icon={PiTerminalBold}
-								className="w-50"
-								optionsArr={colorNames}
-								onChange={setColorPickerFor}
-								value={colorPickerFor}
-							/>
-						</div>
-						{colorPicker}
-					</div>
-				</Popup>
-			)}
-		</>
-	);
+  const handleValueChange = (value) => {
+    setTermPalate((prevThemePalate) => {
+      return {
+        ...prevThemePalate,
+        [colorPickerFor]: value,
+      };
+    });
+  };
+
+  const handleHueChange = (value) => {
+    let tHsv = {
+      ...hsv,
+      h: value.h,
+    };
+    // To make track of hue value. Usefull when the color has no Hue.
+    // Like black, gray.
+    lastHue.current = tHsv.h;
+    let tColor = convertHsvToHex(tHsv);
+    handleValueChange(tColor);
+  };
+  const handleSaturationChange = (value) => {
+    let tHsv = {
+      ...hsv,
+      s: value.s,
+      v: value.v,
+    };
+    let tColor = convertHsvToHex(tHsv);
+    handleValueChange(tColor);
+  };
+
+  let currentColor = termPalate[colorPickerFor] ? termPalate[colorPickerFor] : '#000000';
+
+  const colorPicker = (
+    <div
+      className={`flex flex-col gap-3 overflow-y-auto rounded-md bg-stone-900 p-1 p-2 select-none`}
+      style={{ gridArea: 'colorpicker' }}
+    >
+      <FuzzySelector
+        className=""
+        optionsArr={colorNames}
+        onChange={setColorPickerFor}
+        value={colorPickerFor}
+      />
+      <div className="relative h-3 flex-shrink-0">
+        <Hue hsl={hsv} onChange={handleHueChange} direction="horizontal" />
+      </div>
+      <div className="relative min-h-30 flex-shrink-0 flex-grow-4 border-1 border-indigo-200">
+        <Saturation hsv={hsv} hsl={hsv} onChange={handleSaturationChange} />
+      </div>
+      <div
+        style={{ backgroundColor: currentColor }}
+        className={`relative content-center text-center ${isBrightColor(currentColor) ? 'text-black' : 'text-white'}`}
+      >
+        {colorPickerFor}
+        <br />
+        {currentColor}
+      </div>
+    </div>
+  );
+  if (!compact) {
+    return colorPicker;
+  }
+  return (
+    <>
+      <button
+        className={`mb-1 ml-1 cursor-pointer rounded-sm border border-black bg-red-700 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white`}
+        style={{ gridArea: 'colorpicker' }}
+        onClick={() => {
+          setCompactPopup(true);
+          // close the terminal palate popup.
+          setIsThemePalateActive(false);
+        }}
+      >
+        Pick color
+      </button>
+      <AnimatePresence>
+        {compactPopup && (
+          <Popup closeCb={() => setCompactPopup(false)} noBlur>
+            <div
+              className="z-60 flex h-[50vh] w-[50vh] flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 p-8 text-indigo-200 sm:w-[60vw]"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              {colorPicker}
+            </div>
+          </Popup>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }
 
 export default CustomPicker(ColorPicker);

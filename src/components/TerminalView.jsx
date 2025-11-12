@@ -4,153 +4,209 @@ import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import XtermWebfont from 'xterm-webfont';
 import { FitAddon } from '@xterm/addon-fit';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState, useId } from 'react';
 import { useRef } from 'react';
 import { AppContext } from './AppState';
 import { useQuery } from '@tanstack/react-query';
 import { getAppAnsiContent, getThemeColors } from '../utils/dataFetch';
+import { applyAlpha } from '../utils/colorsUtils';
+import { AnimatePresence } from 'framer-motion';
 
-export default function TerminalView({ className }) {
-	let rows = 35;
-	let cols = 130;
-	let fontSize = 14;
-	let letterSpacing = 0.5;
-	let term = useRef(null);
-	let termDivRef = useRef(null);
+export default function TerminalView() {
+  let rRows = 35;
+  let rCols = 130;
+  let fontSize = 14;
+  let letterSpacing = 0.5;
+  let term = useRef(null);
+  let termDivRef = useRef(null);
 
-	const {
-		themeName,
-		termPalate,
-		setTermPalate,
-		appName,
-		wMMode,
-		filePath,
-		isThemePalateActive,
-		setIsThemePalateActive,
-	} = useContext(AppContext);
+  const {
+    themeName,
+    termPalate,
+    setTermPalate,
+    appName,
+    wMMode,
+    filePath,
+    isThemePalateActive,
+    setIsThemePalateActive,
+    gaps,
+    opacity,
+    blur,
+  } = useContext(AppContext);
 
-	const [content, setContent] = useState('');
-	const [resizeCount, setResizeCount] = useState('');
+  const [content, setContent] = useState('');
+  const [resizeCount, setResizeCount] = useState(0);
 
-	const {
-		isSuccess: isThemeSuccess,
-		error: themeError,
-		data: themeData,
-	} = useQuery({
-		queryKey: [themeName],
-		queryFn: () => getThemeColors(themeName),
-	});
+  const popupId = useId();
 
-	const {
-		isSuccess: isContentSuccess,
-		error: contentError,
-		data: contentData,
-	} = useQuery({
-		queryKey: [appName],
-		queryFn: () => getAppAnsiContent(appName),
-	});
+  const {
+    isSuccess: isThemeSuccess,
+    error: themeError,
+    data: themeData,
+  } = useQuery({
+    queryKey: [themeName],
+    queryFn: () => getThemeColors(themeName),
+  });
 
-	useEffect(() => {
-		if (isThemeSuccess) {
-			setTermPalate({ ...themeData.default });
-		}
-	}, [themeData, themeError, themeName]);
+  const {
+    isSuccess: isContentSuccess,
+    error: contentError,
+    data: contentData,
+  } = useQuery({
+    queryKey: [appName],
+    queryFn: () => getAppAnsiContent(appName),
+  });
 
-	useEffect(() => {
-		if (isContentSuccess) {
-			setContent(contentData);
-		}
+  useEffect(() => {
+    if (isThemeSuccess) {
+      setTermPalate({ ...themeData.default });
+    }
+    if (themeError) {
+      setContent('something somewhere went wrong');
+    }
+  }, [themeData, themeError, themeName]);
 
-		if (contentError) {
-			setContent('something somewhere went wrong :) network issue');
-		}
-	}, [contentData, contentError]);
+  useEffect(() => {
+    if (isContentSuccess) {
+      setContent(contentData);
+    }
 
-	useEffect(() => {
-		term.current = new Terminal({
-			fontSize: fontSize,
-			fontFamily: 'RedditMono',
-			convertEol: true,
-			fontWeight: '400',
-			letterSpacing: letterSpacing,
-			fontWeightBold: '800',
-			theme: termPalate,
-		});
+    if (contentError) {
+      setContent('something somewhere went wrong');
+    }
+  }, [contentData, contentError]);
 
-		term.current.loadAddon(new XtermWebfont());
-		const fitAddon = new FitAddon();
-		term.current.loadAddon(fitAddon);
+  useLayoutEffect(() => {
+    // This xterm combined with fit addon is throwing some errors, that i can't fixed,
+    // that too inside a setTimeout handler. Dosen't crash but still polutes the dev console.
+    // So the error can't be caught. So to fix this. suppress it. :(((
+    window.onerror = function supressNastyError(msg) {
+      return true;
+    };
+    // :( i cant understand the disign of this freaking library.
+    // I am doing somtinng that works just for my use case.
+    // See index.css
+    const termOpt = {
+      fontSize: fontSize,
+      fontFamily: 'RedditMono',
+      convertEol: true,
+      fontWeight: '400',
+      letterSpacing: letterSpacing,
+      fontWeightBold: '800',
+      theme: termPalate,
+    };
 
-		term.current.open(termDivRef.current);
-		fitAddon.fit();
-		const fitDimension = fitAddon.proposeDimensions();
-		// check the propose dimension given by the fit addon
-		// if the dimensions are too small, ie smaller than the dimensions of actual terminal from where the content is captured,
-		// the content may appear wierder, so to avoid the terminal is resized to atleast have the dimension, not less than the original
-		// the dimension used while recording for all apps is {cols: 130, rows: 35}
-		if (fitDimension.cols < 130 || fitDimension.rows < 35) {
-			term.current.resize(
-				fitDimension.cols < 130 ? 130 : fitDimension.cols,
-				fitDimension.rows < 35 ? 35 : fitDimension.rows,
-			);
-		}
-		term.current.write(content);
+    term.current = new Terminal(termOpt);
 
-		termDivRef.current.scrollIntoView();
+    term.current.loadAddon(new XtermWebfont());
+    const fitAddon = new FitAddon();
+    term.current.loadAddon(fitAddon);
 
-		return () => {
-			term.current.dispose();
-		};
-	}, [content, termPalate, resizeCount]);
+    term.current.open(termDivRef.current);
+    fitAddon.fit();
+    const fitDimension = fitAddon.proposeDimensions();
+    // check the propose dimension given by the fit addon
+    // if the dimensions are too small, ie smaller than the dimensions of actual terminal from where the content is captured,
+    // the content may appear wierder, so to avoid the terminal is resized to atleast have the dimension, not less than the original
+    // the dimension used while recording for all apps is {cols: 130, rows: 35}
+    if (fitDimension.cols < rCols || fitDimension.rows < rRows) {
+      term.current.resize(
+        fitDimension.cols < rCols ? rCols : fitDimension.cols,
+        fitDimension.rows < rRows ? rRows : fitDimension.rows,
+      );
+    }
 
-	useEffect(() => {
-		const triggerResizeRender = () => setResizeCount((c) => c + 1);
-		window.addEventListener('resize', triggerResizeRender);
+    term.current.write(content);
+    termDivRef.current.scrollIntoView();
 
-		return () => window.current?.removeEventListener('resize', triggerResizeRender);
-	}, []);
+    return () => {
+      term.current.dispose();
+    };
+  }, [content, termPalate, resizeCount, gaps, wMMode]);
 
-	return (
-		<div
-			className={`${className ? className : ''} relative overflow-hidden rounded-md border-1 border-gray-600 bg-black`}
-			style={{
-				gridArea: 'terminalview',
-				backgroundImage: `url(${filePath})`,
-			}}
-			onDragEnter={() => {
-				setIsThemePalateActive(true);
-			}}
-		>
-			<div className="overflow-scroll" ref={termDivRef} id="terminal"></div>
-			{isThemePalateActive && (
-				<Popup closeCb={() => setIsThemePalateActive(false)} noBlur>
-					<div
-						onClick={(event) => {
-							event.stopPropagation();
-						}}
-						className="rounded-md border-1 border-gray-600 bg-neutral-900 p-4"
-					>
-						<TerminalPalate />
-						<span className="text-wrap text-gray-400">
-							Drag and drop colors into palate slot or choose a slot and pick a color from color
-							picker
-						</span>
-					</div>
-				</Popup>
-			)}
-		</div>
-	);
+  useEffect(() => {
+    const triggerResizeRender = () => setResizeCount((c) => c + 1);
+    window.addEventListener('resize', triggerResizeRender);
+
+    return () => {
+      window.current?.removeEventListener('resize', triggerResizeRender);
+      window.onerror = null;
+    };
+  }, []);
+
+  // install to apply right styles of terminal; hackcy
+  useLayoutEffect(() => {
+    const myTerminalDiv = document.querySelector('#terminal');
+    const xtermTerminalScreen = document.querySelector('.xterm-screen');
+    const xtermTerminalDiv = document.querySelector('.terminal');
+    const xtermTerminalViewport = document.querySelector('.xterm-viewport');
+
+    // bg color when no transparency
+    xtermTerminalScreen.style.backgroundColor = termPalate?.background;
+
+    if (wMMode && filePath) {
+      myTerminalDiv.style.backgroundImage = `url(${filePath})`;
+    }
+
+    if (wMMode) {
+      // gaps
+      xtermTerminalDiv.style.top = `${gaps}%`;
+      xtermTerminalDiv.style.bottom = `${gaps}%`;
+      xtermTerminalDiv.style.left = `${gaps}%`;
+      xtermTerminalDiv.style.right = `${gaps}%`;
+      // Just hide this. :(
+      xtermTerminalViewport.style.display = 'none';
+      // border
+      xtermTerminalDiv.style.border = '1px solid white';
+      // opacity
+      if (termPalate?.background) {
+        xtermTerminalScreen.style.backgroundColor = applyAlpha(termPalate.background, opacity[0]);
+      }
+      // blur
+      xtermTerminalDiv.style.backdropFilter = `blur(${blur[0]}px)`;
+    } else {
+      // gaps
+      xtermTerminalDiv.style.top = '0px';
+      xtermTerminalDiv.style.bottom = '0px';
+      xtermTerminalDiv.style.left = '0px';
+      xtermTerminalDiv.style.right = '0px';
+      // border
+      xtermTerminalDiv.style.border = '0px solid white';
+      // opacity
+      xtermTerminalScreen.style.backgroundColor = termPalate.background;
+    }
+  }, [wMMode, gaps, opacity, blur, content, termPalate, resizeCount, filePath]);
+
+  return (
+    <div
+      ref={termDivRef}
+      id="terminal"
+      className={`relative rounded-md border-1 border-gray-600 bg-cover`}
+      style={{
+        gridArea: 'terminalview',
+      }}
+      onDragEnter={() => {
+        setIsThemePalateActive(true);
+      }}
+    >
+      <AnimatePresence>
+        {isThemePalateActive && (
+          <Popup key={popupId} closeCb={() => setIsThemePalateActive(false)} noBlur>
+            <div
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              className="rounded-md border-1 border-gray-600 bg-neutral-900 p-4"
+            >
+              <TerminalPalate />
+              <span className="text-wrap text-gray-400">
+                Drag and drop colors into palate slot or choose a slot and pick a color from color
+                picker
+              </span>
+            </div>
+          </Popup>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
-
-//function WMWrap({ children, wMMode }) {
-//	console.log(wMMode);
-//	if(wMMode) {
-//		return <div
-//			className='bg-red-500 px-3'
-//			style={{ gridArea: 'terminalview'}}
-//		>
-//			{children}
-//		</div>
-//	}
-//	return children
-//}

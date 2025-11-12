@@ -1,5 +1,5 @@
 function alacritty(termPalate) {
-	let config = `colors:
+  let config = `colors:
   # Default colors
   primary:
     background: '${termPalate.background}'
@@ -26,11 +26,11 @@ function alacritty(termPalate) {
     magenta: '${termPalate.brightMagenta}'
     cyan:    '${termPalate.brightCyan}'
     white:   '${termPalate.brightWhite}'`;
-	return config;
+  return config;
 }
 
 function jsonSchema(termPalate) {
-	let config = `{
+  let config = `{
   "name": "",
   "author": "",
   "color": [
@@ -54,14 +54,13 @@ function jsonSchema(termPalate) {
   "foreground": "${termPalate.foreground}",
   "background": "${termPalate.background}"
 }`;
-	return config;
+  return config;
 }
 
 function rxvt(termPalate) {
-	let config = `! special
+  let config = `! special
 *.foreground:   ${termPalate.foreground}
 *.background:   ${termPalate.background}
-*.cursorColor:  ${termPalate.cursorColor}
 
 ! black
 *.color0:       ${termPalate.black}
@@ -94,20 +93,20 @@ function rxvt(termPalate) {
 ! white
 *.color7:       ${termPalate.white}
 *.color15:      ${termPalate.brightWhite}`;
-	return config;
+  return config;
 }
 
 function genConfig(term, termPalate) {
-	switch (term) {
-		case 'rxvt':
-			return rxvt(termPalate);
-		case 'alacritty':
-			return alacritty(termPalate);
-		case 'json':
-			return jsonSchema(termPalate);
-		default:
-			return "config can't be generated for this terminal. please help to fix this, gimme config templates";
-	}
+  switch (term) {
+    case 'rxvt':
+      return rxvt(termPalate);
+    case 'alacritty':
+      return alacritty(termPalate);
+    case 'json':
+      return jsonSchema(termPalate);
+    default:
+      return "config can't be generated for this terminal. please help to fix this, gimme config templates";
+  }
 }
 
 export default genConfig;

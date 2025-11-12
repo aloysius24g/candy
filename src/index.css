@@ -1,51 +1,108 @@
 @import 'tailwindcss';
 
-@font-face {
-	font-family: 'RedditMono';
-	src:
-		url('./fonts/reddit-mono/RedditMono-Light.woff2') format('woff2'),
-		url('./fonts/reddit-mono/RedditMono-Light.woff') format('woff'),
-		url('./fonts/reddit-mono/RedditMono-Light.ttf') format('truetype');
-	font-weight: 300;
-	font-style: normal;
+.terminal {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  overflow: scroll;
+}
+
+.xterm-screen {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+}
+
+:root {
+  --bg-color: #0d1117;
+  --text-color: #e6edf3;
+  --scrollbar-bg: #0d1117;
+  --scrollbar-thumb: #00ffff33;
+  --scrollbar-thumb-hover: #00ffff66;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Remove scrollbar buttons */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
 }
 
 @font-face {
-	font-family: 'RedditMono';
-	src:
-		url('./fonts/reddit-mono/RedditMono-Regular.woff2') format('woff2'),
-		url('./fonts/reddit-mono/RedditMono-Regular.woff') format('woff'),
-		url('./fonts/reddit-mono/RedditMono-Regular.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
+  font-family: 'RedditMono';
+  src:
+    url('/fonts/reddit-mono/RedditMono-Light.woff2') format('woff2'),
+    url('/fonts/reddit-mono/RedditMono-Light.woff') format('woff'),
+    url('/fonts/reddit-mono/RedditMono-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'RedditMono';
-	src:
-		url('./fonts/reddit-mono/RedditMono-SemiBold.woff2') format('woff2'),
-		url('./fonts/reddit-mono/RedditMono-SemiBold.woff') format('woff'),
-		url('./fonts/reddit-mono/RedditMono-SemiBold.ttf') format('truetype');
-	font-weight: 600;
-	font-style: normal;
+  font-family: 'RedditMono';
+  src:
+    url('/fonts/reddit-mono/RedditMono-Regular.woff2') format('woff2'),
+    url('/fonts/reddit-mono/RedditMono-Regular.woff') format('woff'),
+    url('/fonts/reddit-mono/RedditMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'RedditMono';
-	src:
-		url('./fonts/reddit-mono/RedditMono-Bold.woff2') format('woff2'),
-		url('./fonts/reddit-mono/RedditMono-Bold.woff') format('woff'),
-		url('./fonts/reddit-mono/RedditMono-Bold.ttf') format('truetype');
-	font-weight: 700;
-	font-style: normal;
+  font-family: 'RedditMono';
+  src:
+    url('/fonts/reddit-mono/RedditMono-SemiBold.woff2') format('woff2'),
+    url('/fonts/reddit-mono/RedditMono-SemiBold.woff') format('woff'),
+    url('/fonts/reddit-mono/RedditMono-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'RedditMono';
-	src:
-		url('./fonts/reddit-mono/RedditMono-ExtraBold.woff2') format('woff2'),
-		url('./fonts/reddit-mono/RedditMono-ExtraBold.woff') format('woff'),
-		url('./fonts/reddit-mono/RedditMono-ExtraBold.ttf') format('truetype');
-	font-weight: 800;
-	font-style: normal;
+  font-family: 'RedditMono';
+  src:
+    url('/fonts/reddit-mono/RedditMono-Bold.woff2') format('woff2'),
+    url('/fonts/reddit-mono/RedditMono-Bold.woff') format('woff'),
+    url('/fonts/reddit-mono/RedditMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RedditMono';
+  src:
+    url('/fonts/reddit-mono/RedditMono-ExtraBold.woff2') format('woff2'),
+    url('/fonts/reddit-mono/RedditMono-ExtraBold.woff') format('woff'),
+    url('/fonts/reddit-mono/RedditMono-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
 }
