@@ -303,7 +303,6 @@ export default function TerminalBar({ className }) {
       </Popover.Root>
       <button
         className="flex cursor-pointer items-center gap-2 border-1 border-gray-600 px-2"
-        type="button"
         onClick={() => setIsThemePalateActive(!isThemePalateActive)}
         type="button"
       >
