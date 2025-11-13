@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef, useId } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import ToolTipWrap from './ToolTipWrap';
 import { AppContext } from './AppState';
 import ExportPopup from './ExportPopup';
@@ -35,8 +35,6 @@ export default function TerminalBar({ className }) {
 
   const nextAppRef = useRef(null);
   const fileBrowserRef = useRef(null);
-
-  const popoverId = useId();
 
   const {
     appName,
@@ -227,13 +225,13 @@ export default function TerminalBar({ className }) {
       )}
       <hr className="text-gray-600" />
       <button
-        className="group flex items-center gap-2 hover:text-white"
+        className="flex items-center gap-2 hover:text-white"
         onClick={(e) => {
           e.preventDefault();
           setIsInfoPopup(!isInfoPopup);
         }}
       >
-        <MdInfo className="text-xl group-hover:animate-pulse" />
+        <MdInfo className="text-xl" />
         About
       </button>
     </div>
@@ -252,6 +250,7 @@ export default function TerminalBar({ className }) {
           <button
             className="flex cursor-pointer items-center gap-2 border-1 border-gray-600 px-2"
             type="button"
+            onClick={() => setIsThemePalateActive(false)}
           >
             <CgOptions className="inline text-xl" />
             <span className="text-indigo-200">Options</span>
@@ -260,15 +259,14 @@ export default function TerminalBar({ className }) {
         <Popover.Portal>
           <AnimatePresence>
             <Popover.Content
+              key="options"
               align="start"
               sideOffset="0"
               onFocusCapture={(e) => {
                 e.stopPropagation();
               }}
-              asChild
             >
               <motion.div
-                key={popoverId}
                 initial={{
                   opacity: 0,
                   scale: 0.5,
@@ -286,7 +284,7 @@ export default function TerminalBar({ className }) {
                   duration: 0.2,
                   ease: 'easeInOut',
                 }}
-                className="z-60 flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-indigo-200"
+                className="z-auto flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-indigo-200"
               >
                 {isWide ? (
                   extraButtons
@@ -310,21 +308,23 @@ export default function TerminalBar({ className }) {
         <span className="text-indigo-200">View Palate</span>
       </button>
       {isWide && importantButtons}
-      {isExportPopup && (
-        <Popup closeCb={() => setIsExportPopup(false)}>
-          <ExportPopup />
-        </Popup>
-      )}
-      {isSavePopup && (
-        <Popup closeCb={() => setIsSavePopup(false)}>
-          <SavePopup />
-        </Popup>
-      )}
-      {isInfoPopup && (
-        <Popup closeCb={() => setIsInfoPopup(false)}>
-          <AboutPopup />
-        </Popup>
-      )}
+      <AnimatePresence>
+        {isExportPopup && (
+          <Popup key="export" closeCb={() => setIsExportPopup(false)}>
+            <ExportPopup />
+          </Popup>
+        )}
+        {isSavePopup && (
+          <Popup key="save" closeCb={() => setIsSavePopup(false)}>
+            <SavePopup />
+          </Popup>
+        )}
+        {isInfoPopup && (
+          <Popup key="info" closeCb={() => setIsInfoPopup(false)}>
+            <AboutPopup />
+          </Popup>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

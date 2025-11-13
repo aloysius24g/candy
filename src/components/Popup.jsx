@@ -33,7 +33,7 @@ export default function Popup({ children, closeCb, noBlur }) {
         type: 'tween',
         duration: 0.2,
       }}
-      className={`absolute inset-0 z-50 flex items-center justify-center ${!noBlur && 'backdrop-blur-xs'} p-3`}
+      className={`absolute inset-0 z-10 flex items-center justify-center ${!noBlur && 'backdrop-blur-xs'} p-3`}
       onClick={closeCb}
     >
       {React.Children.map(children, (child) => React.cloneElement(child))}

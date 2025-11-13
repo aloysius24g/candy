@@ -4,7 +4,7 @@ import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import XtermWebfont from 'xterm-webfont';
 import { FitAddon } from '@xterm/addon-fit';
-import { useContext, useEffect, useLayoutEffect, useState, useId } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useRef } from 'react';
 import { AppContext } from './AppState';
 import { useQuery } from '@tanstack/react-query';
@@ -36,8 +36,6 @@ export default function TerminalView() {
 
   const [content, setContent] = useState('');
   const [resizeCount, setResizeCount] = useState(0);
-
-  const popupId = useId();
 
   const {
     isSuccess: isThemeSuccess,
@@ -191,7 +189,7 @@ export default function TerminalView() {
     >
       <AnimatePresence>
         {isThemePalateActive && (
-          <Popup key={popupId} closeCb={() => setIsThemePalateActive(false)} noBlur>
+          <Popup key="theme-palate" closeCb={() => setIsThemePalateActive(false)} Blur>
             <div
               onClick={(event) => {
                 event.stopPropagation();
