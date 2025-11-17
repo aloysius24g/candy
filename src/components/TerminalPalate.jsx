@@ -1,9 +1,8 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { AppContext } from './AppState';
 
 export default function TerminalPalate({ className }) {
-  const { themeName, colorPickerFor, setColorPickerFor, termPalate, setTermPalate } =
-    useContext(AppContext);
+  const { colorPickerFor, setColorPickerFor, termPalate, setTermPalate } = useContext(AppContext);
 
   const colorNames = [
     'foreground',
@@ -52,15 +51,31 @@ export default function TerminalPalate({ className }) {
       onClick={handelClickWraper}
       className={`${className ? className : ''} grid grid-cols-9 p-3 text-center text-nowrap text-indigo-300`}
     >
-      <span className="mb-8 overflow-hidden">Fg-Bg</span>
-      <span className="overflow-hidden">Black</span>
-      <span className="overflow-hidden">Red</span>
-      <span className="overflow-hidden">Green</span>
-      <span className="overflow-hidden">Yellow</span>
-      <span className="overflow-hidden">Blue</span>
-      <span className="overflow-hidden">Magenta</span>
-      <span className="overflow-hidden">Cyan</span>
-      <span className="overflow-hidden">White</span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Fg-Bg
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Black
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">Red</span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Green
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Yellow
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Blue
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Magenta
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        Cyan
+      </span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+        White
+      </span>
 
       {colorNames.map((colorName) => {
         return (

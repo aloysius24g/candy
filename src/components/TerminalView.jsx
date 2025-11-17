@@ -179,7 +179,7 @@ export default function TerminalView() {
     <div
       ref={termDivRef}
       id="terminal"
-      className={`relative rounded-md border-1 border-gray-600 bg-cover`}
+      className={`relative m-2 rounded-md border-1 border-gray-600 bg-cover`}
       style={{
         gridArea: 'terminalview',
       }}

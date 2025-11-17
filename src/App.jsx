@@ -1,15 +1,20 @@
-import { useContext } from 'react';
 import TerminalView from './components/TerminalView';
 import PalateContainer from './components/PalateContainer';
 import TerminalBar from './components/TerminalBar';
-import { AppContext } from './components/AppState';
 import ColorPicker from './components/ColorPicker';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ToastContainer, Slide } from 'react-toastify';
+import { ToastContainer, Slide, toast } from 'react-toastify';
 import { useIsWide } from './utils/responsive';
+import { useEffect } from 'react';
 
 function App() {
   const isWide = useIsWide();
+
+  useEffect(() => {
+    if (!isWide) {
+      toast.warn('please view in desktop for best experience');
+    }
+  }, []);
 
   let gridLayout;
 
@@ -39,7 +44,7 @@ function App() {
     <>
       <ReactQueryDevtools />
       <div
-        className="grid h-screen gap-2 overflow-hidden bg-black text-cyan-300"
+        className="grid h-screen overflow-hidden bg-black text-cyan-300"
         style={{
           gridTemplateAreas: gridLayout.gridTemplateAreas,
           gridTemplateColumns: gridLayout.gridTemplateColumns,

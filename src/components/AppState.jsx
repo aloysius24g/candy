@@ -9,7 +9,7 @@ function AppContextProvider({ children }) {
   const [filePath, setFilePath] = useState(null);
   const [gaps, setGaps] = useState([5]);
   const [blur, setBlur] = useState([2]);
-  const [opacity, setOpacity] = useState([0.9]);
+  const [opacity, setOpacity] = useState([0.5]);
   const [termPalate, setTermPalate] = useState({
     foreground: null,
     black: null,

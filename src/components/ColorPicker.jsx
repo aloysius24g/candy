@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from 'react';
 import FuzzySelector from './FuzzySelector';
-import * as Select from '@radix-ui/react-select';
+import { CgColorPicker } from 'react-icons/cg';
 import Popup from './Popup';
 import { AppContext } from './AppState';
 import { CustomPicker } from 'react-color';
@@ -93,7 +93,7 @@ function ColorPicker({ className, compact }) {
 
   const colorPicker = (
     <div
-      className={`flex flex-col gap-3 overflow-y-auto rounded-md bg-stone-900 p-1 p-2 select-none`}
+      className={`flex flex-col gap-3 overflow-y-auto bg-stone-900 ${!compact && 'border-t border-t-gray-500'} p-2 select-none`}
       style={{ gridArea: 'colorpicker' }}
     >
       <FuzzySelector
@@ -124,7 +124,7 @@ function ColorPicker({ className, compact }) {
   return (
     <>
       <button
-        className={`mb-1 ml-1 cursor-pointer rounded-sm border border-black bg-red-700 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white`}
+        className={`flex cursor-pointer items-center justify-center bg-stone-800 text-white`}
         style={{ gridArea: 'colorpicker' }}
         onClick={() => {
           setCompactPopup(true);
@@ -132,13 +132,13 @@ function ColorPicker({ className, compact }) {
           setIsThemePalateActive(false);
         }}
       >
-        Pick color
+        <CgColorPicker className="text-xl text-cyan-500" />
       </button>
       <AnimatePresence>
         {compactPopup && (
           <Popup closeCb={() => setCompactPopup(false)} noBlur>
             <div
-              className="z-60 flex h-[50vh] w-[50vh] flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 p-8 text-indigo-200 sm:w-[60vw]"
+              className="z-60 flex h-[60vh] w-[50vh] flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 p-8 text-indigo-200 sm:w-[60vw]"
               onClick={(event) => {
                 event.stopPropagation();
               }}

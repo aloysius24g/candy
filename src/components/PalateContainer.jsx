@@ -3,12 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { AppContext } from './AppState';
 import { isBrightColor } from '../utils/colorsUtils';
 import Loader from './Loader';
-import ErrorNotice from './ErrorNotice';
 import { getThemeColors } from '../utils/dataFetch';
 import { toast } from 'react-toastify';
 
 export default function PalateContainer({ className, compact }) {
-  const { themeName } = useContext(AppContext);
+  const { themeName, setIsThemePalateActive } = useContext(AppContext);
 
   const containerRef = useRef(null);
 
@@ -28,10 +27,6 @@ export default function PalateContainer({ className, compact }) {
       }
     },
   });
-
-  useEffect(() => {
-    refetch();
-  }, [themeName]);
 
   useEffect(() => {
     if (error) {
@@ -63,6 +58,7 @@ export default function PalateContainer({ className, compact }) {
     let isBright = isBrightColor(value);
     return (
       <div
+        onClick={() => setIsThemePalateActive(true)}
         onDragStart={(event) => handleDrag(event, value)}
         key={key}
         className={`${isBright ? 'text-black' : 'text-white'} rounded-sm border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
@@ -78,7 +74,7 @@ export default function PalateContainer({ className, compact }) {
     <div
       ref={containerRef}
       onWheel={handleWheelCompact}
-      className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-y-auto scroll-smooth rounded-md bg-stone-800 p-2`}
+      className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-y-auto scroll-smooth bg-stone-800 p-2`}
       style={{ gridArea: 'colorcontainer' }}
     >
       {colorBadges}

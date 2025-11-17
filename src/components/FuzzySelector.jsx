@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { SlMagnifier } from 'react-icons/sl';
 
 export default function FuzzySelector({ optionsArr, onChange, value, Icon, className }) {
   const [inputData, setInputData] = useState('');
@@ -20,9 +19,7 @@ export default function FuzzySelector({ optionsArr, onChange, value, Icon, class
   };
 
   const handleInputOnKeyDown = (event) => {
-		console.log('vu')
     if (event.key === 'Escape') {
-      console.log('hehe');
       onChange(value);
       setInputData(value);
       setIsSuggestionsOn(false);
