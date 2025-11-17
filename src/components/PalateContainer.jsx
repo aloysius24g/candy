@@ -51,8 +51,11 @@ export default function PalateContainer({ className, compact }) {
   }
 
   const handleDrag = (event, value) => {
-    event.dataTransfer.setData('dragData', value);
+    event.dataTransfer.setData('color', value);
     event.dataTransfer.effectAllowed = 'move';
+  };
+  const handleTouchStart = (value) => {
+    window.touchDragColor = value;
   };
   let colorBadges = Object.entries(data.all).map(([key, value]) => {
     let isBright = isBrightColor(value);
@@ -60,6 +63,7 @@ export default function PalateContainer({ className, compact }) {
       <div
         onClick={() => setIsThemePalateActive(true)}
         onDragStart={(event) => handleDrag(event, value)}
+        onTouchStart={() => handleTouchStart(value)}
         key={key}
         className={`${isBright ? 'text-black' : 'text-white'} rounded-sm border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
         style={{ backgroundColor: value }}

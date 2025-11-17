@@ -39,13 +39,28 @@ export default function TerminalPalate({ className }) {
 
   const handleDropPalate = (event, colorName) => {
     event.preventDefault();
-    let data = event.dataTransfer.getData('dragData');
+    let data = event.dataTransfer.getData('color');
+    if (!data) {
+      return;
+    }
     setTermPalate((prevThemePalate) => ({
       ...prevThemePalate,
       [colorName]: data,
     }));
     setColorPickerFor(colorName);
   };
+  const handleTouchEnd = (colorName) => {
+    const color = window.touchDragColor;
+    if (!color) {
+      return;
+    }
+    setTermPalate((prevThemePalate) => ({
+      ...prevThemePalate,
+      [colorName]: color,
+    }));
+    setColorPickerFor(colorName);
+  };
+
   return (
     <div
       onClick={handelClickWraper}
@@ -83,8 +98,12 @@ export default function TerminalPalate({ className }) {
             onClick={(event) => handleClickPalate(event, colorName)}
             key={colorName}
             onDragOver={handleDragOverPalate}
+            onTouchMove={handleDragOverPalate}
             onDrop={(event) => {
               handleDropPalate(event, colorName);
+            }}
+            onTouchEnd={() => {
+              handleTouchEnd(colorName);
             }}
             className={`${colorName === colorPickerFor ? 'border-2 border-blue-500 shadow-xl shadow-blue-500/50' : ''} h-15 content-center select-none`}
             style={{ backgroundColor: termPalate?.[colorName] }}

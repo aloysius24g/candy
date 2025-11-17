@@ -183,7 +183,13 @@ export default function TerminalView() {
       style={{
         gridArea: 'terminalview',
       }}
-      onDragEnter={() => {
+      onDragEnter={(event) => {
+        if (!event.dataTransfer.getData('color')) {
+          return;
+        }
+        setIsThemePalateActive(true);
+      }}
+      onTouchentMove={(event) => {
         setIsThemePalateActive(true);
       }}
     >
