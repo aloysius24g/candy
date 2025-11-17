@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useState, useEffect, useRef, useId } from 'react';
 import ToolTipWrap from './ToolTipWrap';
 import { AppContext } from './AppState';
 import ExportPopup from './ExportPopup';
@@ -6,7 +6,6 @@ import Popup from './Popup';
 import SavePopup from './SavePopup';
 import AboutPopup from './AboutPopup';
 import FuzzySelector from './FuzzySelector';
-import Slider from './Slider';
 import { getAppList, getThemeList } from '../utils/dataFetch';
 import { useMediaQuery } from 'react-responsive';
 import { useQuery } from '@tanstack/react-query';
@@ -22,6 +21,7 @@ import { FaRegSave } from 'react-icons/fa';
 import { LuWallpaper } from 'react-icons/lu';
 
 import * as Popover from '@radix-ui/react-popover';
+import * as RadixSlider from '@radix-ui/react-slider';
 import * as CheckBox from '@radix-ui/react-checkbox';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
@@ -145,95 +145,59 @@ export default function TerminalBar({ className }) {
 
   const extraButtons = (
     <div className="flex flex-col gap-2">
-      <button
-        className="flex cursor-pointer items-center gap-2 hover:text-white"
-        onClick={() => setIsExportPopup(true)}
-        type="button"
-      >
-        <TbFileExport className="text-xl" />
-        Export config
-      </button>
-      <button
-        className="flex cursor-pointer items-center gap-2 hover:text-white"
-        onClick={() => setIsSavePopup(true)}
-        type="button"
-      >
-        <FaRegSave className="text-xl" />
-        Save config
-      </button>
-      <div className="flex items-center gap-2">
-        <CheckBox.Root
-          className="flex h-4 w-4 overflow-hidden rounded-full bg-indigo-200 focus:outline-1 focus:outline-white"
-          checked={slideApps}
-          onCheckedChange={(event) => setSlideApps((pre) => !pre)}
-        >
-          <CheckBox.Indicator className="h-full w-full bg-cyan-600" />
-        </CheckBox.Root>
-        <label>Loop app</label>
-      </div>
+	  <BarButton label='Export config' Icon={TbFileExport} onClick={() => setIsExportPopup(true)} />
+	  <BarButton label='Save config' Icon={FaRegSave} onClick={() => setIsSavePopup(true)} />
+	  <BarOptions label='Loop app' value={slideApps} onValueChange={val => setSlideApps(val)} />
       <hr className="text-gray-600" />
-      <div className="flex items-center gap-2">
-        <CheckBox.Root
-          className="flex h-4 w-4 overflow-hidden rounded-full bg-indigo-200 focus:outline-1 focus:outline-white"
-          checked={wMMode}
-          onCheckedChange={(event) => setWMMode((pre) => !pre)}
-        >
-          <CheckBox.Indicator className="h-full w-full bg-cyan-600" />
-        </CheckBox.Root>
-        <label>Wm look</label>
-      </div>
+	  <BarOptions label='Wm look' value={wMMode} onValueChange={val => setWMMode(val)} />
       {wMMode && (
         <>
-          <div className="flex w-full flex-col gap-2">
-            <label>
-              <button
-                className="flex cursor-pointer items-center gap-2 hover:text-white"
-                onClick={() => {
-                  fileBrowserRef.current.click();
-                }}
-              >
-                <LuWallpaper className="inline text-xl" />
-                Choose Wallpaper
-              </button>
-            </label>
-            <input
-              ref={fileBrowserRef}
-              id="wallpaper-file"
-              type="file"
-              accept="images/*"
-              className="hidden"
-              onChange={(event) => {
-                const file = event.target.files[0];
-                const url = URL.createObjectURL(file);
-                setFilePath(url);
-              }}
-            />
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <label>gap</label>
-            <Slider step={1} min={1} max={30} value={gaps} onChange={(val) => setGaps(val)} />
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <label>opaq</label>
-            <Slider value={opacity} step={0.05} max={1} onChange={(val) => setOpacity(val)} />
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <label>blur</label>
-            <Slider max={20} step={1} value={blur} onChange={(val) => setBlur(val)} />
-          </div>
+		  <BarButton Icon={LuWallpaper} label='Choose wallpaper'
+			onClick={() => fileBrowserRef.current.click()}
+		  />
+		  <input
+			ref={fileBrowserRef}
+			id="wallpaper-file"
+			type="file"
+			accept="images/*"
+			className="hidden"
+			onChange={(event) => {
+			  const file = event.target.files[0];
+			  const url = URL.createObjectURL(file);
+			  setFilePath(url);
+			}}
+		  />
+		  <div id='slider-group'
+			className='flex flex-col justify-between my-3 gap-2'
+		  >
+			<BarSlider
+			  label= 'Gap'
+			  step={1}
+			  min={1}
+			  max={30}
+			  value={gaps}
+			  onChange={(val) => setGaps(val)}
+			/>
+			<BarSlider
+			  label= 'Opq'
+			  step={0.05}
+			  max={1}
+			  value={opacity}
+			  onChange={(val) => setOpacity(val)}
+			/>
+			<BarSlider
+			  label= 'Blur'
+			  step={1}
+			  min={1}
+			  max={30}
+			  value={blur}
+			  onChange={(val) => setBlur(val)}
+			/>
+		  </div>
         </>
       )}
       <hr className="text-gray-600" />
-      <button
-        className="flex items-center gap-2 hover:text-white"
-        onClick={(e) => {
-          e.preventDefault();
-          setIsInfoPopup(!isInfoPopup);
-        }}
-      >
-        <MdInfo className="text-xl" />
-        About
-      </button>
+	  <BarButton label='About' Icon={MdInfo} onClick={() => setIsInfoPopup(true)} />
     </div>
   );
 
@@ -242,7 +206,7 @@ export default function TerminalBar({ className }) {
       className={`col-span-13 row-span-1 flex h-12 items-center justify-between gap-2 border-b-1 border-gray-600 bg-neutral-900 p-2`}
       style={{ gridArea: 'sitebar' }}
     >
-      <span className="flex content-center items-center px-2 text-center font-mono text-lg font-bold tracking-widest text-nowrap text-indigo-200 uppercase">
+      <span className="select-none flex content-center items-center px-2 text-center font-mono text-lg font-bold tracking-widest text-nowrap text-indigo-200 uppercase">
         termcandy
       </span>
       <Popover.Root>
@@ -326,5 +290,53 @@ export default function TerminalBar({ className }) {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function BarButton({Icon, label, onClick}) {
+	return <button
+		className="focus:outline-none focus:text-white flex cursor-pointer items-center gap-2 hover:text-white"
+		onClick={onClick}
+		type="button"
+	>
+		<Icon className="text-xl" />
+		{label}
+	</button>
+}
+function BarOptions({value, onValueChange, label}) {
+  const id = useId();
+  return <div className="cursor-pointer flex items-center gap-2">
+	<CheckBox.Root
+	  id={id}
+	  className="peer flex h-4 w-4 overflow-hidden rounded-full bg-indigo-200 focus:outline-1 focus:outline-white"
+	  checked={value}
+	  onCheckedChange={onValueChange}
+	>
+	  <CheckBox.Indicator className="h-full w-full bg-cyan-600" />
+	</CheckBox.Root>
+	<label className="peer-focus:text-white" htmlFor={id}>{label}</label>
+  </div>
+}
+function BarSlider({ label, value, onChange, defaultValue, min, max, step }) {
+  const id = useId();
+  return (
+	<div className="flex items-center justify-between gap-2">
+	  <label htmlFor={id}>{label}</label>
+	  <RadixSlider.Root
+		id={id}
+		className="relative flex h-5 w-[200px] cursor-pointer touch-none items-center select-none"
+		defaultValue={defaultValue}
+		value={value}
+		max={max}
+		min={min}
+		step={step}
+		onValueChange={onChange}
+	  >
+		<RadixSlider.Track className="relative h-[3px] grow rounded-full bg-gray-600">
+		  <RadixSlider.Range className="absolute h-full rounded-full bg-indigo-300" />
+		</RadixSlider.Track>
+		<RadixSlider.Thumb className="block size-4 cursor-grab rounded-[10px] bg-gray-300 hover:bg-white focus:bg-cyan-300 focus:outline-none" />
+	  </RadixSlider.Root>
+	</div>
   );
 }

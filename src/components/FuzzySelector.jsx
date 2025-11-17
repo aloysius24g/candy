@@ -20,6 +20,7 @@ export default function FuzzySelector({ optionsArr, onChange, value, Icon, class
   };
 
   const handleInputOnKeyDown = (event) => {
+		console.log('vu')
     if (event.key === 'Escape') {
       console.log('hehe');
       onChange(value);
