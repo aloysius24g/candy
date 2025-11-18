@@ -5,6 +5,7 @@ import { isBrightColor } from '../utils/colorsUtils';
 import Loader from './Loader';
 import { getThemeColors } from '../utils/dataFetch';
 import { toast } from 'react-toastify';
+import ToolTipWrap from './ToolTipWrap';
 
 export default function PalateContainer({ className, compact }) {
   const { themeName, setIsThemePalateActive } = useContext(AppContext);
@@ -60,17 +61,19 @@ export default function PalateContainer({ className, compact }) {
   let colorBadges = Object.entries(data.all).map(([key, value]) => {
     let isBright = isBrightColor(value);
     return (
-      <div
-        onClick={() => setIsThemePalateActive(true)}
-        onDragStart={(event) => handleDrag(event, value)}
-        onTouchStart={() => handleTouchStart(value)}
-        key={key}
-        className={`${isBright ? 'text-black' : 'text-white'} rounded-sm border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
-        style={{ backgroundColor: value }}
-        draggable
-      >
-        {value}
-      </div>
+      <ToolTipWrap key={key} content="drag me into termninal" showOnSide={!compact}>
+        <div
+          key={key}
+          onClick={() => setIsThemePalateActive(true)}
+          onDragStart={(event) => handleDrag(event, value)}
+          onTouchStart={() => handleTouchStart(value)}
+          className={`${isBright ? 'text-black' : 'text-white'} cursor-pointer border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
+          style={{ backgroundColor: value }}
+          draggable
+        >
+          {value}
+        </div>
+      </ToolTipWrap>
     );
   });
 

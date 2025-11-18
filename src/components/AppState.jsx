@@ -5,11 +5,11 @@ const AppContext = createContext();
 function AppContextProvider({ children }) {
   const [themeName, setThemeName] = useState(null);
   const [appName, setAppName] = useState(null);
-  const [wMMode, setWMMode] = useState(false);
-  const [filePath, setFilePath] = useState(null);
-  const [gaps, setGaps] = useState([5]);
+  const [wMMode, setWMMode] = useState(true);
+  const [filePath, setFilePath] = useState('default.png');
+  const [gaps, setGaps] = useState([4]);
   const [blur, setBlur] = useState([2]);
-  const [opacity, setOpacity] = useState([0.5]);
+  const [opacity, setOpacity] = useState([0.9]);
   const [termPalate, setTermPalate] = useState({
     foreground: null,
     black: null,

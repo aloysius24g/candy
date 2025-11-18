@@ -44,7 +44,7 @@ function App() {
     <>
       <ReactQueryDevtools />
       <div
-        className="grid h-screen overflow-hidden bg-black text-cyan-300"
+        className="grid h-svh overflow-hidden bg-black text-cyan-300"
         style={{
           gridTemplateAreas: gridLayout.gridTemplateAreas,
           gridTemplateColumns: gridLayout.gridTemplateColumns,

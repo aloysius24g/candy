@@ -13,12 +13,13 @@ import { LuPalette } from 'react-icons/lu';
 import { CiPalette } from 'react-icons/ci';
 import { PiTerminalBold } from 'react-icons/pi';
 import OptionsPopOver from './OptionsPopOver';
+import ToolTipWrap from './ToolTipWrap';
 
 const optionsInitState = {
   isExportPopup: false,
   isSavePopup: false,
   isInfoPopup: false,
-  slideApps: false,
+  slideApps: true,
 };
 const optionsReducer = (state, action) => {
   switch (action) {
@@ -133,6 +134,7 @@ export default function TerminalBar({ className }) {
         optionsArr={appListData}
         onChange={setAppName}
         value={appName}
+        toolTip="CLI app, choose one to view the app in the terminal."
       />
     );
   }
@@ -144,6 +146,7 @@ export default function TerminalBar({ className }) {
         optionsArr={themeListData}
         onChange={setThemeName}
         value={themeName}
+        toolTip="Default themes, choose one to apply to the terminal"
       />
     );
   }
@@ -174,6 +177,7 @@ export default function TerminalBar({ className }) {
         onClick={() => setIsThemePalateActive(!isThemePalateActive)}
         Icon={CiPalette}
         label="View palate"
+        toolTip="show the 16 colors of terminal. Drag and drop colors, or choose one slot and pick form color picker"
       />
       {isWide && appFS}
       {isWide && themeFS}
@@ -198,15 +202,17 @@ export default function TerminalBar({ className }) {
   );
 }
 
-export function BarButton({ label, Icon, onClick }) {
+export function BarButton({ label, Icon, onClick, toolTip }) {
   return (
-    <button
-      className="flex cursor-pointer items-center gap-2 border-1 border-gray-600 px-2 text-sm whitespace-nowrap md:text-base"
-      onClick={onClick}
-      type="button"
-    >
-      <Icon className="inline text-xl" />
-      <span className="text-indigo-200">{label}</span>
-    </button>
+    <ToolTipWrap content={toolTip}>
+      <button
+        className="flex cursor-pointer items-center gap-2 border-1 border-gray-600 px-2 text-sm whitespace-nowrap md:text-base"
+        onClick={onClick}
+        type="button"
+      >
+        <Icon className="inline text-xl" />
+        <span className="text-indigo-200">{label}</span>
+      </button>
+    </ToolTipWrap>
   );
 }

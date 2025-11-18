@@ -12,7 +12,7 @@ export default function AboutPopup() {
         application writen in react.js. Terminal emulation is achieved using xterm.js library. This
         site will be usefull for making the terminal an eyecandy, thus termcandy.
       </div>
-      <div className="mb-5">contact: aloysius24@atomicmail.io</div>
+      <div className="mb-5">dev,contact: aloysius24@atomicmail.io</div>
     </div>
   );
 }

@@ -179,7 +179,7 @@ export default function TerminalView() {
     <div
       ref={termDivRef}
       id="terminal"
-      className={`relative m-2 rounded-md border-1 border-gray-600 bg-cover`}
+      className={`relative m-2 border-1 border-gray-600 bg-cover`}
       style={{
         gridArea: 'terminalview',
       }}
@@ -195,7 +195,7 @@ export default function TerminalView() {
     >
       <AnimatePresence>
         {isThemePalateActive && (
-          <Popup key="theme-palate" closeCb={() => setIsThemePalateActive(false)} Blur>
+          <Popup key="theme-palate" closeCb={() => setIsThemePalateActive(false)} noBlur>
             <div
               onClick={(event) => {
                 event.stopPropagation();
@@ -204,8 +204,7 @@ export default function TerminalView() {
             >
               <TerminalPalate />
               <span className="text-wrap text-gray-400">
-                Drag and drop colors into palate slot or choose a slot and pick a color from color
-                picker
+                Drag and drop colors here and cutomise it fine in the color picker.
               </span>
             </div>
           </Popup>
