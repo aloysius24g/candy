@@ -53,7 +53,7 @@ export default function PalateContainer({ className, compact }) {
   }
 
   let colorBadges = Object.entries(data.all).map(([key, value]) => {
-    return <ColorBadge key={key} color={value} toolTipShowOnSide={!compact} />;
+    return <ColorBadge key={value} color={value} toolTipShowOnSide={!compact} />;
   });
 
   return (
@@ -76,7 +76,7 @@ export function ColorBadge({ color, toolTipShowOnSide }) {
         <div
           style={{ backgroundColor: color }}
           onClick={() => setIsThemePalateActive(true)}
-          className={`${isBright ? 'text-black' : 'text-white'} cursor-pointer touch-none border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
+          className={`${isBright ? 'text-black' : 'text-white'} cursor-pointer border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
         >
           {color}
         </div>

@@ -33,7 +33,7 @@ function App() {
     if (active.data.current.type === 'color' && over.data.current.accepts.includes('color')) {
       setColorPickerFor(over.id);
       setTermPalate((pre) => ({ ...pre, [over.id]: active.id }));
-      setActiveDraggableColor(null);
+	  setActiveDraggableColor(null);
     }
   };
 
@@ -99,9 +99,12 @@ function App() {
         >
           <PalateContainer compact={!isWide} />
           <TerminalView />
-          <DragOverlay>
-            {activeDraggableColor ? <ColorBadge color={activeDraggableColor} /> : null}
-          </DragOverlay>
+		  <DragOverlay transition={null}>
+			{activeDraggableColor ? <div
+			  className='border-1 border-indigo-300 rounded-full w-8 h-8'
+			  style={{backgroundColor: activeDraggableColor}} >
+			</div> : null}
+		  </DragOverlay>
         </DndContext>
         <ColorPicker compact={!isWide} />
       </div>

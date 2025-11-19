@@ -14,7 +14,9 @@ export default function Draggable(props) {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      style={{ opacity: isDragging ? 0 : 1 }}
+      style={{
+		opacity: isDragging ? 0 : 1,
+	  }}
     >
       {props.children}
     </Element>

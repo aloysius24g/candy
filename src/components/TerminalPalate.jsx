@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AppContext } from './AppState';
-import { useDroppable } from '@dnd-kit/core';
+import { useDndContext, useDroppable } from '@dnd-kit/core';
+import { hover } from 'framer-motion';
 
 export default function TerminalPalate({ className }) {
   const { colorPickerFor, setColorPickerFor, termPalate, setTermPalate } = useContext(AppContext);
@@ -75,6 +76,8 @@ export default function TerminalPalate({ className }) {
           >
             {termPalate[colorName] ? '' : 'Choose'}
             <DroppableZone id={colorName} />
+			<div className='absolute inset-0'>
+			</div>
           </div>
         );
       })}
@@ -83,12 +86,23 @@ export default function TerminalPalate({ className }) {
 }
 
 function DroppableZone({ id }) {
-  const { setNodeRef } = useDroppable({
+  const { isOver, setNodeRef } = useDroppable({
     id: id,
     data: {
       accepts: ['color'],
     },
   });
+  const { active } = useDndContext()
 
-  return <div className="absolute inset-0 -z-50" ref={setNodeRef}></div>;
+  let hoveredWithColor = null;
+  if(isOver && (active.data.current.type === 'color')) {
+	hoveredWithColor = active.id;
+  }
+	console.log(hoveredWithColor)
+
+  return <div
+	className={`absolute inset-0 ${hoveredWithColor && 'z-50'}`}
+	style={{backgroundColor: hoveredWithColor}}
+	ref={setNodeRef}
+  ></div>;
 }

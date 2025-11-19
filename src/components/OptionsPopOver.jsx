@@ -108,7 +108,6 @@ export default function OptionsPopOver({ open, onOpenChange, state, onAction: di
         />
       </Popover.Trigger>
       <Popover.Portal>
-        <AnimatePresence>
           <Popover.Content
             key="options"
             align="start"
@@ -116,26 +115,22 @@ export default function OptionsPopOver({ open, onOpenChange, state, onAction: di
             onFocusCapture={(e) => {
               e.stopPropagation();
             }}
+			className='z-20'
+			forceMount
           >
             <motion.div
               initial={{
                 opacity: 0,
-                scale: 0.5,
               }}
               animate={{
                 opacity: 1,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.5,
               }}
               transition={{
                 type: 'tween',
                 duration: 0.2,
                 ease: 'easeInOut',
               }}
-              className="text-md z-auto flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-sm text-indigo-200"
+              className="text-md flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-sm text-indigo-200"
             >
               <div className="flex flex-col gap-2">
                 {!isWide && (
@@ -232,7 +227,6 @@ export default function OptionsPopOver({ open, onOpenChange, state, onAction: di
               </div>
             </motion.div>
           </Popover.Content>
-        </AnimatePresence>
       </Popover.Portal>
     </Popover.Root>
   );
