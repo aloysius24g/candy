@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from './AppState';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
-import { hover } from 'framer-motion';
 
 export default function TerminalPalate({ className }) {
   const { colorPickerFor, setColorPickerFor, termPalate, setTermPalate } = useContext(AppContext);
@@ -40,29 +39,29 @@ export default function TerminalPalate({ className }) {
       onClick={handelClickWraper}
       className={`${className ? className : ''} grid grid-cols-9 p-3 text-center text-nowrap text-indigo-300`}
     >
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Fg-Bg
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Black
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">Red</span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">Red</span>
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Green
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Yellow
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Blue
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Magenta
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         Cyan
       </span>
-      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto sm:rotate-0">
+      <span className="mb-2 h-15 rotate-270 content-center sm:mb-8 sm:h-auto md:rotate-0">
         White
       </span>
 
@@ -97,7 +96,6 @@ function DroppableZone({ id }) {
   if (isOver && active.data.current.type === 'color') {
     hoveredWithColor = active.id;
   }
-  console.log(hoveredWithColor);
 
   return (
     <div

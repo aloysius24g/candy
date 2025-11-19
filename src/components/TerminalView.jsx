@@ -77,12 +77,6 @@ export default function TerminalView() {
   }, [contentData, contentError]);
 
   useLayoutEffect(() => {
-    // This xterm combined with fit addon is throwing some errors, that i can't fixed,
-    // that too inside a setTimeout handler. Dosen't crash but still polutes the dev console.
-    // So the error can't be caught. So to fix this. suppress it. :(((
-    window.onerror = function supressNastyError(msg) {
-      return true;
-    };
     // :( i cant understand the disign of this freaking library.
     // I am doing somtinng that works just for my use case.
     // See index.css
@@ -119,6 +113,7 @@ export default function TerminalView() {
 
     term.current.write(content);
     termDivRef.current.scrollIntoView();
+    termDivRef.current.querySelector('textarea').remove();
 
     return () => {
       term.current.dispose();
@@ -126,11 +121,20 @@ export default function TerminalView() {
   }, [content, termPalate, resizeCount, gaps, wMMode]);
 
   useEffect(() => {
+    // This xterm combined with fit addon is throwing some errors, that i can't fixed,
+    // that too inside a setTimeout handler. Dosen't crash but still polutes the dev console.
+    // So the error can't be caught. So to fix this. suppress it. :(((
+    window.onerror = function supressNastyError(msg) {
+      return true;
+    };
     const triggerResizeRender = () => setResizeCount((c) => c + 1);
     window.addEventListener('resize', triggerResizeRender);
+    const handleEscape = () => setIsThemePalateActive(false);
+    window.addEventListener('keydown', handleEscape);
 
     return () => {
-      window.current?.removeEventListener('resize', triggerResizeRender);
+      window.removeEventListener('resize', triggerResizeRender);
+      window.removeEventListener('keydown', handleEscape);
       window.onerror = null;
     };
   }, []);
@@ -186,6 +190,7 @@ export default function TerminalView() {
 
   return (
     <div
+      onClick={() => setIsThemePalateActive(false)}
       ref={termDivRef}
       id="terminal"
       className={`relative m-2 border-1 border-gray-600 bg-cover`}
@@ -201,8 +206,14 @@ export default function TerminalView() {
           opacity: isThemePalateActive ? 1 : 0,
           zIndex: isThemePalateActive ? 40 : -10,
         }}
-        className="absolute top-1/2 left-1/2 min-w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-md border-1 border-gray-600 bg-neutral-900 p-4"
+        className="absolute top-1/2 left-1/2 flex w-[93vw] -translate-x-1/2 -translate-y-1/2 flex-col rounded-md border-1 border-gray-600 bg-neutral-900 p-4 sm:w-4/5 md:w-2/3"
       >
+        <button
+          className="self-end border-1 border-gray-600 p-2 text-red-400"
+          onClick={() => setIsThemePalateActive(false)}
+        >
+          close
+        </button>
         <TerminalPalate />
         <span className="text-wrap text-gray-400">
           Drag and drop colors here and cutomise it fine in the color picker.

@@ -16,7 +16,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getAppList, getThemeList } from '../utils/dataFetch';
 
 import { motion } from 'framer-motion';
-import { AnimatePresence } from 'framer-motion';
 import { BarButton } from './TerminalBar';
 import ToolTipWrap from './ToolTipWrap';
 

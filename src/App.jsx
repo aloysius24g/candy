@@ -43,11 +43,11 @@ function App() {
   const pointerSensor = useSensor(PointerSensor);
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 500,
-      tolerance: 100,
+      delay: 300,
+      tolerance: 5,
     },
   });
-  const sensor = useSensors(pointerSensor, touchSensor);
+  const sensors = useSensors(pointerSensor, touchSensor);
 
   useEffect(() => {
     if (!isWide) {
@@ -92,7 +92,7 @@ function App() {
       >
         <TerminalBar />
         <DndContext
-          sensors={sensor}
+          sensors={sensors}
           onDragStart={(e) => setActiveDraggableColor(e.active.id)}
           onDragEnd={dropEndHandler}
           measuring={{ droppable: { strategy: MeasuringStrategy.BeforeDragging } }}
