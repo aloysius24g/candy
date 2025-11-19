@@ -11,14 +11,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getAppAnsiContent, getThemeColors } from '../utils/dataFetch';
 import { applyAlpha } from '../utils/colorsUtils';
 import { AnimatePresence } from 'framer-motion';
+import { useDndContext, useDroppable } from '@dnd-kit/core';
 
 export default function TerminalView() {
   let rRows = 35;
   let rCols = 130;
   let fontSize = 14;
   let letterSpacing = 0.5;
-  let term = useRef(null);
-  let termDivRef = useRef(null);
 
   const {
     themeName,
@@ -36,6 +35,10 @@ export default function TerminalView() {
 
   const [content, setContent] = useState('');
   const [resizeCount, setResizeCount] = useState(0);
+  const term = useRef(null);
+  const termDivRef = useRef(null);
+
+  const { active: isDragOver } = useDndContext();
 
   const {
     isSuccess: isThemeSuccess,
@@ -132,6 +135,12 @@ export default function TerminalView() {
     };
   }, []);
 
+  useEffect(() => {
+    if (isDragOver) {
+      setIsThemePalateActive(true);
+    }
+  }, [isDragOver]);
+
   // install to apply right styles of terminal; hackcy
   useLayoutEffect(() => {
     const myTerminalDiv = document.querySelector('#terminal');
@@ -182,15 +191,6 @@ export default function TerminalView() {
       className={`relative m-2 border-1 border-gray-600 bg-cover`}
       style={{
         gridArea: 'terminalview',
-      }}
-      onDragEnter={(event) => {
-        if (!event.dataTransfer.getData('color')) {
-          return;
-        }
-        setIsThemePalateActive(true);
-      }}
-      onTouchentMove={(event) => {
-        setIsThemePalateActive(true);
       }}
     >
       <AnimatePresence>

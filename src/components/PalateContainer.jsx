@@ -6,6 +6,7 @@ import Loader from './Loader';
 import { getThemeColors } from '../utils/dataFetch';
 import { toast } from 'react-toastify';
 import ToolTipWrap from './ToolTipWrap';
+import Draggable from './Draggable';
 
 export default function PalateContainer({ className, compact }) {
   const { themeName, setIsThemePalateActive } = useContext(AppContext);
@@ -18,7 +19,7 @@ export default function PalateContainer({ className, compact }) {
     ? (e) => (containerRef.current.scrollLeft += e.deltaY)
     : () => {}; // eat five star do noting.
 
-  const { isFetching, refetch, error, data } = useQuery({
+  const { isFetching, error, data } = useQuery({
     queryKey: [themeName],
     queryFn: () => {
       if (themeName) {
@@ -51,40 +52,35 @@ export default function PalateContainer({ className, compact }) {
     );
   }
 
-  const handleDrag = (event, value) => {
-    event.dataTransfer.setData('color', value);
-    event.dataTransfer.effectAllowed = 'move';
-  };
-  const handleTouchStart = (value) => {
-    window.touchDragColor = value;
-  };
   let colorBadges = Object.entries(data.all).map(([key, value]) => {
-    let isBright = isBrightColor(value);
-    return (
-      <ToolTipWrap key={key} content="drag me into termninal" showOnSide={!compact}>
-        <div
-          key={key}
-          onClick={() => setIsThemePalateActive(true)}
-          onDragStart={(event) => handleDrag(event, value)}
-          onTouchStart={() => handleTouchStart(value)}
-          className={`${isBright ? 'text-black' : 'text-white'} cursor-pointer border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
-          style={{ backgroundColor: value }}
-          draggable
-        >
-          {value}
-        </div>
-      </ToolTipWrap>
-    );
+    return <ColorBadge key={key} color={value} toolTipShowOnSide={!compact} />;
   });
 
   return (
     <div
       ref={containerRef}
       onWheel={handleWheelCompact}
-      className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-y-auto scroll-smooth bg-stone-800 p-2`}
+      className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-x-hidden overflow-y-auto scroll-smooth bg-stone-800 p-2`}
       style={{ gridArea: 'colorcontainer' }}
     >
       {colorBadges}
     </div>
+  );
+}
+
+export function ColorBadge({ color, toolTipShowOnSide }) {
+  const isBright = isBrightColor(color);
+  return (
+    <Draggable key={color} id={color}>
+      <ToolTipWrap content="drag me into termninal" showOnSide={toolTipShowOnSide}>
+        <div
+          style={{ backgroundColor: color }}
+          onClick={() => setIsThemePalateActive(true)}
+          className={`${isBright ? 'text-black' : 'text-white'} cursor-pointer touch-none border border-indigo-300 px-1 py-5 text-center text-xs select-none`}
+        >
+          {color}
+        </div>
+      </ToolTipWrap>
+    </Draggable>
   );
 }

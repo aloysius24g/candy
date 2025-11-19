@@ -19,7 +19,7 @@ const optionsInitState = {
   isExportPopup: false,
   isSavePopup: false,
   isInfoPopup: false,
-  slideApps: true,
+  slideApps: false,
 };
 const optionsReducer = (state, action) => {
   switch (action) {

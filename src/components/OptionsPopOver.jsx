@@ -265,7 +265,10 @@ function PopOptions({ value, onValueChange, label, toolTip }) {
         >
           <CheckBox.Indicator className="h-full w-full bg-cyan-600" />
         </CheckBox.Root>
-        <label className="cursor-pointer group-hover:text-white peer-focus:text-white" htmlFor={id}>
+        <label
+          className="flex-grow-1 cursor-pointer group-hover:text-white peer-focus:text-white"
+          htmlFor={id}
+        >
           {label}
         </label>
       </div>

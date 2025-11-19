@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from './AppState';
+import { useDroppable } from '@dnd-kit/core';
 
 export default function TerminalPalate({ className }) {
   const { colorPickerFor, setColorPickerFor, termPalate, setTermPalate } = useContext(AppContext);
@@ -29,35 +30,7 @@ export default function TerminalPalate({ className }) {
     event.stopPropagation();
   };
 
-  const handleDragOverPalate = (event) => {
-    event.preventDefault();
-  };
-
-  const handleClickPalate = (event, colorName) => {
-    setColorPickerFor(colorName);
-  };
-
-  const handleDropPalate = (event, colorName) => {
-    event.preventDefault();
-    let data = event.dataTransfer.getData('color');
-    if (!data) {
-      return;
-    }
-    setTermPalate((prevThemePalate) => ({
-      ...prevThemePalate,
-      [colorName]: data,
-    }));
-    setColorPickerFor(colorName);
-  };
-  const handleTouchEnd = (colorName) => {
-    const color = window.touchDragColor;
-    if (!color) {
-      return;
-    }
-    setTermPalate((prevThemePalate) => ({
-      ...prevThemePalate,
-      [colorName]: color,
-    }));
+  const handleClickPalate = (colorName) => {
     setColorPickerFor(colorName);
   };
 
@@ -95,23 +68,27 @@ export default function TerminalPalate({ className }) {
       {colorNames.map((colorName) => {
         return (
           <div
-            onClick={(event) => handleClickPalate(event, colorName)}
+            onClick={() => handleClickPalate(colorName)}
             key={colorName}
-            onDragOver={handleDragOverPalate}
-            onTouchMove={handleDragOverPalate}
-            onDrop={(event) => {
-              handleDropPalate(event, colorName);
-            }}
-            onTouchEnd={() => {
-              handleTouchEnd(colorName);
-            }}
-            className={`${colorName === colorPickerFor ? 'border-2 border-blue-500 shadow-xl shadow-blue-500/50' : ''} h-15 content-center select-none`}
+            className={`${colorName === colorPickerFor ? 'border-2 border-blue-500 shadow-xl shadow-blue-500/50' : ''} relative h-15 content-center select-none`}
             style={{ backgroundColor: termPalate?.[colorName] }}
           >
             {termPalate[colorName] ? '' : 'Choose'}
+            <DroppableZone id={colorName} />
           </div>
         );
       })}
     </div>
   );
+}
+
+function DroppableZone({ id }) {
+  const { setNodeRef } = useDroppable({
+    id: id,
+    data: {
+      accepts: ['color'],
+    },
+  });
+
+  return <div className="absolute inset-0 -z-50" ref={setNodeRef}></div>;
 }

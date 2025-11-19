@@ -1,14 +1,53 @@
 import TerminalView from './components/TerminalView';
-import PalateContainer from './components/PalateContainer';
+import PalateContainer, { ColorBadge } from './components/PalateContainer';
 import TerminalBar from './components/TerminalBar';
 import ColorPicker from './components/ColorPicker';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer, Slide, toast } from 'react-toastify';
 import { useIsWide } from './utils/responsive';
-import { useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import {
+  DndContext,
+  DragOverlay,
+  MeasuringStrategy,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { AppContext } from './components/AppState';
 
 function App() {
   const isWide = useIsWide();
+
+  const [activeDraggableColor, setActiveDraggableColor] = useState(null);
+
+  const { setColorPickerFor, setTermPalate } = useContext(AppContext);
+
+  const dropEndHandler = (e) => {
+    const { active, over } = e;
+    if (!over) {
+      return;
+    }
+    // check if its a color drop
+    if (active.data.current.type === 'color' && over.data.current.accepts.includes('color')) {
+      setColorPickerFor(over.id);
+      setTermPalate((pre) => ({ ...pre, [over.id]: active.id }));
+      setActiveDraggableColor(null);
+    }
+  };
+
+  // make a sensor to make the touch screen wait for some time before triggering
+  // a drag on draggable.
+  // In futrue do some design pattern to seperate this logic in a different component.
+  const pointerSensor = useSensor(PointerSensor);
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 500,
+      tolerance: 100,
+    },
+  });
+  const sensor = useSensors(pointerSensor, touchSensor);
 
   useEffect(() => {
     if (!isWide) {
@@ -52,9 +91,19 @@ function App() {
         }}
       >
         <TerminalBar />
-        <PalateContainer compact={!isWide} />
+        <DndContext
+          sensors={sensor}
+          onDragStart={(e) => setActiveDraggableColor(e.active.id)}
+          onDragEnd={dropEndHandler}
+          measuring={{ droppable: { strategy: MeasuringStrategy.BeforeDragging } }}
+        >
+          <PalateContainer compact={!isWide} />
+          <TerminalView />
+          <DragOverlay>
+            {activeDraggableColor ? <ColorBadge color={activeDraggableColor} /> : null}
+          </DragOverlay>
+        </DndContext>
         <ColorPicker compact={!isWide} />
-        <TerminalView />
       </div>
       <ToastContainer
         theme="dark"
