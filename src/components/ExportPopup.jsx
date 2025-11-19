@@ -22,7 +22,7 @@ export default function ExportPopup() {
         <div className="flex">
           <label className="content-center">Emu</label>
           <select
-            className="border-1 border-gray-600 self-center p-1 text-indigo-200 focus:border-indigo-400 focus:outline-none"
+            className="self-center border-1 border-gray-600 p-1 text-indigo-200 focus:border-indigo-400 focus:outline-none"
             value={termType}
             onChange={(event) => setTermType(event.target.value)}
           >
@@ -34,7 +34,7 @@ export default function ExportPopup() {
           </select>
         </div>
         <button
-          className="cursor-pointer flex items-center"
+          className="flex cursor-pointer items-center"
           onClick={() =>
             navigator.clipboard
               .writeText(genConfig(termType, termPalate))

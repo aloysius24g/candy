@@ -16,7 +16,7 @@ export default function Draggable(props) {
       {...attributes}
       style={{
         opacity: isDragging ? 0 : 1,
-		touchAction: 'none',
+        touchAction: 'none',
       }}
     >
       {props.children}
