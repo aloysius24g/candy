@@ -15,8 +15,8 @@ export default function Draggable(props) {
       {...listeners}
       {...attributes}
       style={{
-		opacity: isDragging ? 0 : 1,
-	  }}
+        opacity: isDragging ? 0 : 1,
+      }}
     >
       {props.children}
     </Element>

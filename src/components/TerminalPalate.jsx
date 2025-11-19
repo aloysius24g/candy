@@ -76,8 +76,7 @@ export default function TerminalPalate({ className }) {
           >
             {termPalate[colorName] ? '' : 'Choose'}
             <DroppableZone id={colorName} />
-			<div className='absolute inset-0'>
-			</div>
+            <div className="absolute inset-0"></div>
           </div>
         );
       })}
@@ -92,17 +91,19 @@ function DroppableZone({ id }) {
       accepts: ['color'],
     },
   });
-  const { active } = useDndContext()
+  const { active } = useDndContext();
 
   let hoveredWithColor = null;
-  if(isOver && (active.data.current.type === 'color')) {
-	hoveredWithColor = active.id;
+  if (isOver && active.data.current.type === 'color') {
+    hoveredWithColor = active.id;
   }
-	console.log(hoveredWithColor)
+  console.log(hoveredWithColor);
 
-  return <div
-	className={`absolute inset-0 ${hoveredWithColor && 'z-50'}`}
-	style={{backgroundColor: hoveredWithColor}}
-	ref={setNodeRef}
-  ></div>;
+  return (
+    <div
+      className={`absolute inset-0 ${hoveredWithColor && 'z-50'}`}
+      style={{ backgroundColor: hoveredWithColor }}
+      ref={setNodeRef}
+    ></div>
+  );
 }

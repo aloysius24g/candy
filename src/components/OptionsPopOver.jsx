@@ -108,125 +108,125 @@ export default function OptionsPopOver({ open, onOpenChange, state, onAction: di
         />
       </Popover.Trigger>
       <Popover.Portal>
-          <Popover.Content
-            key="options"
-            align="start"
-            sideOffset="0"
-            onFocusCapture={(e) => {
-              e.stopPropagation();
+        <Popover.Content
+          key="options"
+          align="start"
+          sideOffset="0"
+          onFocusCapture={(e) => {
+            e.stopPropagation();
+          }}
+          className="z-20"
+          forceMount
+        >
+          <motion.div
+            initial={{
+              opacity: 0,
             }}
-			className='z-20'
-			forceMount
+            animate={{
+              opacity: 1,
+            }}
+            transition={{
+              type: 'tween',
+              duration: 0.2,
+              ease: 'easeInOut',
+            }}
+            className="text-md flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-sm text-indigo-200"
           >
-            <motion.div
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              transition={{
-                type: 'tween',
-                duration: 0.2,
-                ease: 'easeInOut',
-              }}
-              className="text-md flex min-w-44 flex-col gap-3 border border-gray-600 bg-neutral-900 p-4 text-sm text-indigo-200"
-            >
-              <div className="flex flex-col gap-2">
-                {!isWide && (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      {appFS}
-                      {themeFS}
-                    </div>
-                    <hr className="text-gray-600" />
-                  </>
-                )}
-                <PopButton
-                  label="Export config"
-                  Icon={TbFileExport}
-                  onClick={() => dispatch('toggleExport')}
-                  toolTip="Export the current theme palate."
-                />
-                <PopButton
-                  label="Save config"
-                  Icon={FaRegSave}
-                  onClick={() => dispatch('toggleSave')}
-                  toolTip="Save the current theme in this page, can be restore later."
-                />
-                <PopOptions
-                  label="slideShow apps"
-                  value={state.slideApps}
-                  onValueChange={() => dispatch('toggleSlideApps')}
-                  toolTip="Slideshow the CLI apps."
-                />
-                <hr className="text-gray-600" />
-                <PopOptions
-                  label="Wm look"
-                  value={wMMode}
-                  onValueChange={(val) => setWMMode(val)}
-                  toolTip="View how the terminal will look in desktop/window manager."
-                />
-                {wMMode && (
-                  <>
-                    <PopButton
-                      Icon={LuWallpaper}
-                      label="Choose wallpaper"
-                      onClick={() => fileBrowserRef.current.click()}
-                      toolTip="Choose your wallpaper, So that you can make a matching theme for your terminal"
+            <div className="flex flex-col gap-2">
+              {!isWide && (
+                <>
+                  <div className="flex flex-col items-center gap-2">
+                    {appFS}
+                    {themeFS}
+                  </div>
+                  <hr className="text-gray-600" />
+                </>
+              )}
+              <PopButton
+                label="Export config"
+                Icon={TbFileExport}
+                onClick={() => dispatch('toggleExport')}
+                toolTip="Export the current theme palate."
+              />
+              <PopButton
+                label="Save config"
+                Icon={FaRegSave}
+                onClick={() => dispatch('toggleSave')}
+                toolTip="Save the current theme in this page, can be restore later."
+              />
+              <PopOptions
+                label="slideShow apps"
+                value={state.slideApps}
+                onValueChange={() => dispatch('toggleSlideApps')}
+                toolTip="Slideshow the CLI apps."
+              />
+              <hr className="text-gray-600" />
+              <PopOptions
+                label="Wm look"
+                value={wMMode}
+                onValueChange={(val) => setWMMode(val)}
+                toolTip="View how the terminal will look in desktop/window manager."
+              />
+              {wMMode && (
+                <>
+                  <PopButton
+                    Icon={LuWallpaper}
+                    label="Choose wallpaper"
+                    onClick={() => fileBrowserRef.current.click()}
+                    toolTip="Choose your wallpaper, So that you can make a matching theme for your terminal"
+                  />
+                  <input
+                    ref={fileBrowserRef}
+                    id="wallpaper-file"
+                    type="file"
+                    accept="images/*"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      const url = URL.createObjectURL(file);
+                      setFilePath(url);
+                    }}
+                  />
+                  <div id="slider-group" className="my-3 flex flex-col justify-between gap-2">
+                    <PopSlider
+                      label="Gap"
+                      step={1}
+                      min={1}
+                      max={30}
+                      value={gaps}
+                      onChange={(val) => setGaps(val)}
+                      toolTip="Set gap within the desktop."
                     />
-                    <input
-                      ref={fileBrowserRef}
-                      id="wallpaper-file"
-                      type="file"
-                      accept="images/*"
-                      className="hidden"
-                      onChange={(event) => {
-                        const file = event.target.files[0];
-                        const url = URL.createObjectURL(file);
-                        setFilePath(url);
-                      }}
+                    <PopSlider
+                      label="Opq"
+                      step={0.05}
+                      max={1}
+                      value={opacity}
+                      onChange={(val) => setOpacity(val)}
+                      toolTip="Know how opaque your terminal must to be good looking."
                     />
-                    <div id="slider-group" className="my-3 flex flex-col justify-between gap-2">
-                      <PopSlider
-                        label="Gap"
-                        step={1}
-                        min={1}
-                        max={30}
-                        value={gaps}
-                        onChange={(val) => setGaps(val)}
-                        toolTip="Set gap within the desktop."
-                      />
-                      <PopSlider
-                        label="Opq"
-                        step={0.05}
-                        max={1}
-                        value={opacity}
-                        onChange={(val) => setOpacity(val)}
-                        toolTip="Know how opaque your terminal must to be good looking."
-                      />
-                      <PopSlider
-                        label="Blur"
-                        step={1}
-                        min={1}
-                        max={30}
-                        value={blur}
-                        onChange={(val) => setBlur(val)}
-                        toolTip="Background blur visual"
-                      />
-                    </div>
-                  </>
-                )}
-                <hr className="text-gray-600" />
-                <PopButton
-                  label="About"
-                  Icon={MdInfo}
-                  onClick={() => dispatch('toggleInfo')}
-                  toolTip="About this tool. And about the developer"
-                />
-              </div>
-            </motion.div>
-          </Popover.Content>
+                    <PopSlider
+                      label="Blur"
+                      step={1}
+                      min={1}
+                      max={30}
+                      value={blur}
+                      onChange={(val) => setBlur(val)}
+                      toolTip="Background blur visual"
+                    />
+                  </div>
+                </>
+              )}
+              <hr className="text-gray-600" />
+              <PopButton
+                label="About"
+                Icon={MdInfo}
+                onClick={() => dispatch('toggleInfo')}
+                toolTip="About this tool. And about the developer"
+              />
+            </div>
+          </motion.div>
+        </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
   );

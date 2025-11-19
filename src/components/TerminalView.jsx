@@ -87,7 +87,7 @@ export default function TerminalView() {
     // I am doing somtinng that works just for my use case.
     // See index.css
     const termOpt = {
-	  disableMouse: true,
+      disableMouse: true,
       fontSize: fontSize,
       fontFamily: 'RedditMono',
       convertEol: true,
@@ -193,21 +193,21 @@ export default function TerminalView() {
         gridArea: 'terminalview',
       }}
     >
-	  <div
-		onClick={(event) => {
-		  event.stopPropagation();
-		}}
-		style={{
-		  opacity: isThemePalateActive ? 1 : 0,
-		  zIndex: isThemePalateActive ? 40 : -10
-		}}
-		className="min-w-[60vw] absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 rounded-md border-1 border-gray-600 bg-neutral-900 p-4"
-	  >
-		<TerminalPalate />
-		<span className="text-wrap text-gray-400">
-		  Drag and drop colors here and cutomise it fine in the color picker.
-		</span>
-	  </div>
+      <div
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+        style={{
+          opacity: isThemePalateActive ? 1 : 0,
+          zIndex: isThemePalateActive ? 40 : -10,
+        }}
+        className="absolute top-1/2 left-1/2 min-w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-md border-1 border-gray-600 bg-neutral-900 p-4"
+      >
+        <TerminalPalate />
+        <span className="text-wrap text-gray-400">
+          Drag and drop colors here and cutomise it fine in the color picker.
+        </span>
+      </div>
     </div>
   );
 }

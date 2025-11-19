@@ -113,7 +113,7 @@ export default function TerminalBar({ className }) {
     if (!optionsState.slideApps) {
       return;
     }
-	nextAppRef.current();
+    nextAppRef.current();
     const intervalId = setInterval(() => nextAppRef.current(), 4000);
 
     return () => clearInterval(intervalId);
