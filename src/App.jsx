@@ -1,5 +1,5 @@
 import TerminalView from './components/TerminalView';
-import PalateContainer, { ColorBadge } from './components/PalateContainer';
+import PalateContainer from './components/PalateContainer';
 import TerminalBar from './components/TerminalBar';
 import ColorPicker from './components/ColorPicker';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -43,7 +43,7 @@ function App() {
   const pointerSensor = useSensor(PointerSensor);
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 300,
+      delay: 250,
       tolerance: 5,
     },
   });

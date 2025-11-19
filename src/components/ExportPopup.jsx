@@ -18,11 +18,11 @@ export default function ExportPopup() {
         event.stopPropagation();
       }}
     >
-      <div className="row-span-1 flex w-full flex-row justify-between border-b-1 border-b-gray-600 bg-stone-800 px-3">
-        <div className="flex items-center">
-          <label className="mx-3 content-center">Emulator</label>
+      <div className="row-span-1 flex w-full flex-row justify-between border-b-1 border-b-gray-600 bg-stone-800 px-1 sm:px-3">
+        <div className="flex">
+          <label className="content-center">Emu</label>
           <select
-            className="border-1 border-gray-600 p-1 px-4 text-indigo-200 focus:border-indigo-400 focus:outline-none"
+            className="border-1 border-gray-600 self-center p-1 text-indigo-200 focus:border-indigo-400 focus:outline-none"
             value={termType}
             onChange={(event) => setTermType(event.target.value)}
           >
@@ -34,7 +34,7 @@ export default function ExportPopup() {
           </select>
         </div>
         <button
-          className="cursor-pointer"
+          className="cursor-pointer flex items-center"
           onClick={() =>
             navigator.clipboard
               .writeText(genConfig(termType, termPalate))
@@ -42,7 +42,7 @@ export default function ExportPopup() {
               .catch(() => toast.error("can't copy", { type: 'error' }))
           }
         >
-          <LuCopy className="mx-2 inline text-xl" />
+          <LuCopy className="inline text-xl" />
           <span className="">Copy</span>
         </button>
       </div>
