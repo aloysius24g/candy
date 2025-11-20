@@ -9,7 +9,7 @@ import ToolTipWrap from './ToolTipWrap';
 import Draggable from './Draggable';
 
 export default function PalateContainer({ className, compact }) {
-  const { themeName, setIsThemePalateActive } = useContext(AppContext);
+  const { themeName } = useContext(AppContext);
 
   const containerRef = useRef(null);
 
@@ -60,7 +60,7 @@ export default function PalateContainer({ className, compact }) {
     <div
       ref={containerRef}
       onWheel={handleWheelCompact}
-      className={` ${compact ? 'grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-x-hidden overflow-y-auto scroll-smooth bg-stone-800 p-2`}
+      className={` ${compact ? 'h14 grid-flow-col grid-rows-1' : 'grid-flow-row grid-cols-2'} grid gap-1 overflow-x-hidden overflow-y-auto scroll-smooth bg-stone-800 p-1 sm:p-2`}
       style={{ gridArea: 'colorcontainer' }}
     >
       {colorBadges}

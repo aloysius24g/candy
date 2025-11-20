@@ -1,5 +1,4 @@
 import TerminalPalate from './TerminalPalate';
-import Popup from './Popup';
 import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import XtermWebfont from 'xterm-webfont';
@@ -11,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAppAnsiContent, getThemeColors } from '../utils/dataFetch';
 import { applyAlpha } from '../utils/colorsUtils';
 import { useDndContext } from '@dnd-kit/core';
+import { useIsWide } from '../utils/responsive';
 
 export default function TerminalView() {
   let rRows = 35;
@@ -36,6 +36,8 @@ export default function TerminalView() {
   const [resizeCount, setResizeCount] = useState(0);
   const term = useRef(null);
   const termDivRef = useRef(null);
+
+  const isWide = useIsWide();
 
   const { active: isDragOver } = useDndContext();
 
@@ -82,7 +84,7 @@ export default function TerminalView() {
     // See index.css
     const termOpt = {
       disableMouse: true,
-      fontSize: fontSize,
+      fontSize: isWide ? fontSize : 5,
       fontFamily: 'RedditMono',
       convertEol: true,
       fontWeight: '400',
@@ -118,7 +120,7 @@ export default function TerminalView() {
     return () => {
       term.current.dispose();
     };
-  }, [content, termPalate, resizeCount, gaps, wMMode]);
+  }, [content, isWide, termPalate, resizeCount, gaps, wMMode]);
 
   useEffect(() => {
     // This xterm combined with fit addon is throwing some errors, that i can't fixed,
@@ -186,7 +188,7 @@ export default function TerminalView() {
       // opacity
       xtermTerminalScreen.style.backgroundColor = termPalate.background;
     }
-  }, [wMMode, gaps, opacity, blur, content, termPalate, resizeCount, filePath]);
+  }, [isWide, wMMode, gaps, opacity, blur, content, termPalate, resizeCount, filePath]);
 
   return (
     <div

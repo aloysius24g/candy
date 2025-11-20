@@ -39,7 +39,7 @@ function App() {
 
   // make a sensor to make the touch screen wait for some time before triggering
   // a drag on draggable.
-  // In futrue do some design pattern to seperate this logic in a different component.
+  // try to seperate this logic in a different component.
   const pointerSensor = useSensor(PointerSensor);
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
@@ -51,7 +51,7 @@ function App() {
 
   useEffect(() => {
     if (!isWide) {
-      toast.warn('please view in desktop for best experience');
+      toast.warn('please view in wide screen/desktop for best experience');
     }
   }, []);
 

@@ -8,11 +8,20 @@ export default function AboutPopup() {
     >
       <h1 className="text-3xl font-bold">About</h1>
       <div className="mt-5 flex-grow-1 text-justify">
-        This is a simple tool to customize terminal emulator's theme. This is a single page
+        Termcandy is a simple tool to customize terminal emulator's theme. This is a single page
         application writen in react.js. Terminal emulation is achieved using xterm.js library. This
-        site will be usefull for making the terminal an eyecandy, thus termcandy.
+        site will be usefull to rice terminal as an eyecandy, thus termcandy. I made this for my
+        personal use then decided to host it. I am still working on support to more emulators,
+        adding more themes and optimizing performance.
       </div>
-      <div className="mb-5">dev,contact: aloysius24@atomicmail.io</div>
+      <div className="text-md mb-5">
+        dev,contact:
+        <span className="mx-2">
+          <a className="font-bold hover:text-green-300" href="mailto:aloysius24@atomicmail.io">
+            aloysius24@atomicmail.io
+          </a>
+        </span>
+      </div>
     </div>
   );
 }
