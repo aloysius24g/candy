@@ -13,7 +13,7 @@ export default function ExportPopup() {
 
   return (
     <div
-      className="grid h-[60vh] w-[80vw] grid-rows-8 border-1 border-gray-600 bg-neutral-900 p-2 sm:w-[60vw]"
+      className="grid h-[60vh] container mx-auto grid-rows-8 border-1 border-gray-600 bg-neutral-900 p-2 sm:w-[60vw]"
       onClick={(event) => {
         event.stopPropagation();
       }}
