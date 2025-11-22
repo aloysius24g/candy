@@ -31,7 +31,7 @@ export default function SavePopup({ closeCb }) {
 
   return (
     <div
-      className="flex h-[30vh] container mx-auto flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 px-4 md:w-[60vw]"
+      className="container mx-auto flex h-[30vh] flex-col justify-center gap-2 rounded-md border-1 border-gray-600 bg-neutral-900 px-4 md:w-[60vw]"
       onClick={(event) => {
         event.stopPropagation();
       }}

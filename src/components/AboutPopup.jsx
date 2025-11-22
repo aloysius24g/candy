@@ -1,7 +1,7 @@
 export default function AboutPopup() {
   return (
     <div
-      className="flex min-h-[60vh] container mx-atuo flex-col items-center gap-3 overflow-auto border-1 border-gray-600 bg-neutral-900 p-3 text-indigo-200 md:w-[60vw]"
+      className="mx-atuo container flex min-h-[60vh] flex-col items-center gap-3 overflow-auto border-1 border-gray-600 bg-neutral-900 p-3 text-indigo-200 md:w-[60vw]"
       onClick={(event) => {
         event.stopPropagation();
       }}
