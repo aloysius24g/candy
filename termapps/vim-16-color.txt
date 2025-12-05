@@ -1,0 +1,35 @@
+[1m[33m 15 [36m# System-wide .bashrc file for interactive bash(1) shells.[0m
+[1m[33m 14 [0m
+[1m[33m 13 [36m# To enable the settings / commands in this file for login shells as well,[0m
+[1m[33m 12 [36m# this file has to be sourced in /etc/profile.[0m
+[1m[33m 11 [0m
+[1m[33m 10 [36m# If not running interactively, don't do anything[0m
+[1m[33m  9 [[0m [1m[33m-z[0m [1m[33m"[34m$PS1[33m"[0m [1m[33m][0m && [1m[33mreturn[0m
+[1m[33m  8 [0m
+[1m[33m  7 [36m# check the window size after each command and, if necessary,[0m
+[1m[33m  6 [36m# update the values of LINES and COLUMNS.[0m
+[1m[33m  5 shopt[0m [1m[31m-s[0m checkwinsize
+[1m[33m  4 [0m
+[1m[33m  3 [7m[36m# set variable identifying the chroot you work in (used in the prompt below)[0;7m [0m
+[1m[33m  2 [7mif [[0;7m [1m[33m-z[0;7m [1m[33m"[34m${debian_chroot[33m:-[34m}[33m"[0;7m [1m[33m][0;7m [1m[33m&&[0;7m [1m[33m[[0;7m [1m[33m-r[0;7m /etc/debian_chroot [1m[33m];[0;7m [1m[33mthen[0;7m [0m
+[1m[33m  1 [0;7m    [1m[36mdebian_chroot[0;7m=[1m[34m$([31mcat /etc/debian_chroot[34m)[0;7m [0m
+[1m[33m16  [7mfi[0m
+[1m[33m  1 [0m
+[1m[33m  2 [36m# set a fancy prompt (non-color, overwrite the one in /etc/profile)[0m
+[1m[33m  3 [36m# but only if not SUDOing and have SUDO_PS1 set; then assume smart user.[0m
+[1m[33m  4 if ![0m [1m[33m[[0m [1m[33m-n[0m [1m[33m"[34m${SUDO_USER}[33m"[0m [1m[33m-a[0m [1m[33m-n[0m [1m[33m"[34m${SUDO_PS1}[33m"[0m [1m[33m];[0m [1m[33mthen[0m
+[1m[33m  5 [0m  [1m[34mPS1[33m='[35m${debian_chroot:+($debian_chroot)}\u@\h:\w\$ [33m'[0m
+[1m[33m  6 fi[0m
+[1m[33m  7 [0m
+[1m[33m  8 [36m# Commented out, don't overwrite xterm -T "title" -n "icontitle" by default.[0m
+[1m[33m  9 [36m# If this is an xterm set the title to user@host:dir[0m
+[1m[33m 10 [36m#case "$TERM" in[0m
+[1m[33m 11 [36m#xterm*|rxvt*)[0m
+[1m[33m 12 [36m#    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'[0m
+[1m[33m 13 [36m#    ;;[0m
+[1m[33m 14 [36m#*)[0m
+[1m[33m 15 [36m#    ;;[0m
+[1m[33m 16 [36m#esac[0m
+[1m[33m 17 [0m
+[1m[33m 18 [36m# enable bash completion in interactive shells[0m
+[1m-- VISUAL --[0m                                                                                              4         16,3          Top

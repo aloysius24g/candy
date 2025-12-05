@@ -1,0 +1,35 @@
+root@3792626d2ca1:/# ls --color=always /
+[1m[34mansi[0m               [1m[34mboot[0m             [1m[36mdemo-sym-link[0m               [1m[34metc[0m         [1m[36mlib[0m    [1m[34mmnt[0m   [1m[34mroot[0m  [1m[34msbin.usr-is-merged[0m  [30m[42mtmp[39m[49m
+[1m[36mbin[0m                [1m[34mdata[0m             [1m[34mdev[0m                         [1m[34mhome[0m        [1m[36mlib64[0m  [1m[34mopt[0m   [1m[34mrun[0m   [1m[34msrv[0m                 [1m[34musr[0m
+[1m[34mbin.usr-is-merged[0m  [1m[32mdemo-executable[0m  [1m[34mdocker-entrypoint-initdb.d[0m  [1m[36mjs-yaml.js[0m  [1m[34mmedia[0m  [1m[34mproc[0m  [1m[36msbin[0m  [1m[34msys[0m                 [1m[34mvar[0m
+root@3792626d2ca1:/# ls --color=always /dev
+[1m[36mcore[0m  [1m[36mfd[0m  [1m[33mfull[0m  [30m[42mmqueue[39m[49m  [1m[33mnull[0m  [1m[36mptmx[0m  [1m[34mpts[0m  [1m[33mrandom[0m  [30m[42mshm[39m[49m  [1m[36mstderr[0m  [1m[36mstdin[0m  [1m[36mstdout[0m  [1m[33mtty[0m  [1m[33murandom[0m  [1m[33mzero[0m
+root@3792626d2ca1:/# ls --color=always -l /dev
+total 0
+lrwxrwxrwx 1 root root   11 Dec  5 05:05 [1m[36mcore[0m -> /proc/kcore
+lrwxrwxrwx 1 root root   13 Dec  5 05:05 [1m[36mfd[0m -> /proc/self/fd
+crw-rw-rw- 1 root root 1, 7 Dec  5 05:05 [1m[33mfull[0m
+drwxrwxrwt 2 root root   40 Dec  5 05:05 [30m[42mmqueue[39m[49m
+crw-rw-rw- 1 root root 1, 3 Dec  5 05:05 [1m[33mnull[0m
+lrwxrwxrwx 1 root root    8 Dec  5 05:05 [1m[36mptmx[0m -> pts/ptmx
+drwxr-xr-x 2 root root    0 Dec  5 05:05 [1m[34mpts[0m
+crw-rw-rw- 1 root root 1, 8 Dec  5 05:05 [1m[33mrandom[0m
+drwxrwxrwt 2 root root   40 Dec  5 05:05 [30m[42mshm[39m[49m
+lrwxrwxrwx 1 root root   15 Dec  5 05:05 [1m[36mstderr[0m -> /proc/self/fd/2
+lrwxrwxrwx 1 root root   15 Dec  5 05:05 [1m[36mstdin[0m -> /proc/self/fd/0
+lrwxrwxrwx 1 root root   15 Dec  5 05:05 [1m[36mstdout[0m -> /proc/self/fd/1
+crw-rw-rw- 1 root root 5, 0 Dec  5 06:34 [1m[33mtty[0m
+crw-rw-rw- 1 root root 1, 9 Dec  5 05:05 [1m[33murandom[0m
+crw-rw-rw- 1 root root 1, 5 Dec  5 05:05 [1m[33mzero[0m
+root@3792626d2ca1:/#
+
+
+
+
+
+
+
+
+
+
+
